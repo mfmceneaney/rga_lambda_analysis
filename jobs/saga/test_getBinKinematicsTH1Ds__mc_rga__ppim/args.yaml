@@ -1,0 +1,21 @@
+baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga/*.root"
+tree: "t"
+nthreads: 8
+cuts: "mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0 && detector_p==6 && detector_pim==6"
+mc_cuts: "sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0" #NOTE: This cut is preapplied on data skim but not in MC
+particle_suffixes: ["_p","_pim"]
+var_formulas:
+binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
+binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_full_bin_ppim.yaml"]
+binvars: ["run","x","xF_ppim","z_ppim"] #NOTE: INCLUDE ALL VARIABLE NAMES AND LIMITS TO AUTOMATICALLY APPLY OVERALL LIMIT CUTS
+binvar_lims: [[1,100],[0,1],[0,1],[0,1]]
+depolvars: ["depoly"]
+depolvar_lims: [[0,1]]
+asymfitvars: ["costhetaT","phi_h_ppim"]
+asymfitvar_lims: [[-1,1],[0,6.28]]
+massfitvars: ["mass_ppim"]
+massfitvar_lims: [[1.08,1.24]]
+kinvars: ["Q2","y","W","x","z_ppim","xF_ppim"]
+kinvar_lims: [[0.0,11.0],[0.0,1.0],[0.0,5.0],[0.0,1.0],[0.0,1.0],[0.0,1.0]]
+kinvar_bins: [100,100,100,100,100,100]
