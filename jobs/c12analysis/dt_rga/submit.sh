@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=mc_rga_c12analysis
+#SBATCH --job-name=dt_rga_c12analysis
 #SBATCH --output=/farm_out/%u/%x-%j-%N.out
 #SBATCH --error=/farm_out/%u/%x-%j-%N.err
 #SBATCH --partition=production
