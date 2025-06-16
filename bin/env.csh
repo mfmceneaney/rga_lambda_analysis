@@ -14,5 +14,5 @@ setenv TPID_RGA 2212
 setenv BPOL_RGA 0.8922 #NOTE: This is for outbending F18 data only.
 
 # Set prexisting HIPO data paths for CLAS12-Analysis #NOTE: CHANGE AS NEEDED
-setenv RGA_MC_DIR "/cache/clas12/rg-a/production/montecarlo/clasdis_pass1/fall2018/torus+1/v1/bkg50nA_10604MeV/o"
+setenv RGA_MC_DIR "/cache/clas12/rg-a/production/montecarlo/clasdis_pass1/fall2018/torus+1/v1/bkg50nA_10604MeV"
 setenv RGA_DT_DIR "/cache/clas12/rg-a/production/recon/fall2018/torus+1/pass1/v1/dst/train/nSidis"
