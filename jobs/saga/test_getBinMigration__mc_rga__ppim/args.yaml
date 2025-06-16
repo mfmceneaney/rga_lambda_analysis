@@ -2,7 +2,7 @@ baseoutpath: "out_" #NOTE: This will be prepended to the default output path lik
 inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga/*.root"
 tree: "t"
 nthreads: 8
-cuts: "mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0 && detector_p==6 && detector_pim==6"
+cuts: "mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0 && detector_p==6 && detector_pim==6 && (ppid_p_mc==3122 && pidx_p_mc==pidx_pim_mc && abs(dtheta_p)<6*TMath::Pi()/180.0 && abs(dtheta_pim)<6*TMath::Pi()/180.0)" #NOTE: MAKE SURE YOU CUT FOR SIGNAL ONLY!
 mc_cuts: "sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0" #NOTE: This cut is preapplied on data skim but not in MC
 particle_suffixes: ["_p","_pim"]
 var_formulas:
