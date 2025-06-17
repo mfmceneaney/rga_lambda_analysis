@@ -2,7 +2,7 @@
 
 # Set variables for this project
 setenv RGA_LAMBDA_ANALYSIS_HOME $PWD
-setenv RGH_LAMBDA_ANALYSIS_VOL_DIR "/volatile/clas12/users/$USER/rga_lambda_analysis" #NOTE: CHANGE AS NEEDED.
+setenv RGA_LAMBDA_ANALYSIS_VOL_DIR "/volatile/clas12/users/$USER/rga_lambda_analysis" #NOTE: CHANGE AS NEEDED.
 
 # Set variables for saga
 setenv SAGA_HOME "/work/clas12/users/$USER/saga" #NOTE: CHANGE AS NEEDED. This is a path to your local repo of: https://github.com/mfmceneaney/saga

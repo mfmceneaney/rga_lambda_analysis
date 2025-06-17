@@ -1,7 +1,7 @@
 #!/bin/bash                                                  
 
 export INFILE="/path/test.hipo"
-export OUTDIR="$RGA_LAMBDA_ANALYSIS_DIR/jobs/c12analysis/mc_rga"
+export OUTDIR="$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga"
 export name=`echo $INFILE | xargs -n 1 basename`
 mkdir -p $OUTDIR
 cd $OUTDIR
