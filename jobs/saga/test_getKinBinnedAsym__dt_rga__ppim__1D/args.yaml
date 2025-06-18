@@ -1,5 +1,5 @@
 baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
-inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/dt_rga/skim_*.root"
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/dt_rga/skim_*.root"
 tree: "t"
 nthreads: 1
 cuts: "mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0 && detector_p==6 && detector_pim==6"
@@ -55,8 +55,6 @@ htspin_states:
 var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
   - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
   - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
-  - ["depol0_mc","(float)(y_mc*(1.0-0.5*y_mc)/(1.0-y_mc+0.5*y_mc*y_mc))"]
-  - ["depol1_mc","(float)(y_mc*sqrt(1.0-y_mc)/(1.0-y_mc+0.5*y_mc*y_mc))"]
   - ["depoly","y"]
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
 binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"] #NOTE: You can alternately load a bin scheme from another YAML file if you do not put a map under `binschemes` above.

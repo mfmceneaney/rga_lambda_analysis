@@ -1,5 +1,5 @@
 baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
-inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/mc_rga/skim_*.root"
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga/skim_*.root"
 tree: "t"
 nthreads: 1
 cuts: "mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0 && detector_p==6 && detector_pim==6"
