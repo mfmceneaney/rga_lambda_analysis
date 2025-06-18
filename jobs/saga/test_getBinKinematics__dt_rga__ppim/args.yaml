@@ -8,8 +8,8 @@ particle_suffixes: ["_p","_pim"]
 var_formulas:
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
 binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"]
-binvars: ["run","x","xF_ppim","z_ppim"] #NOTE: INCLUDE ALL VARIABLE NAMES AND LIMITS TO AUTOMATICALLY APPLY OVERALL LIMIT CUTS
-binvar_lims: [[1,100],[0,1],[0,1],[0,1]]
+binvars: ["Q2","x","xF_ppim","z_ppim"] #NOTE: INCLUDE ALL VARIABLE NAMES AND LIMITS TO AUTOMATICALLY APPLY OVERALL LIMIT CUTS
+binvar_lims: [[1,11],[0,1],[0,1],[0,1]]
 depolvars: ["depoly"]
 depolvar_lims: [[0,1]]
 asymfitvars: ["costhetaT","phi_h_ppim"]
