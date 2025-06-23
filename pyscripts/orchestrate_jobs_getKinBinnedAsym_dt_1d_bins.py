@@ -1,12 +1,8 @@
 # Basic imports
-import sys
 import os
 
 # Import saga modules
-SAGA_HOME = os.environ['SAGA_HOME']
-sys.path.append(os.path.abspath(os.path.join(SAGA_HOME,'py')))
 from saga.orchestrate import create_jobs, submit_jobs
-import saga.aggregate as sagas
 
 # Set dry run to `False` once you are sure you want to submit.
 dry_run=True

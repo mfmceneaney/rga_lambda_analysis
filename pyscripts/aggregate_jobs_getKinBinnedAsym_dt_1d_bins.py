@@ -2,12 +2,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import sys
 
 # Import saga modules
-SAGA_HOME = os.environ['SAGA_HOME']
-sys.path.append(os.path.abspath(os.path.join(SAGA_HOME,'py')))
 import saga.aggregate as sagas
+from saga.data import load_yaml, load_csv, save_bin_mig_mat_to_csv
+from saga.plot import set_default_plt_settings, plot_results
 
 # Set base directory from environment
 RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
@@ -86,8 +85,8 @@ for result_name in result_names:
 
         # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
         binschemes_paths_name = "binschemes_paths"
-        yaml_path = sagas.load_yaml(yaml_path)[binschemes_names][0]
-        binschemes = sagas.load_yaml(yaml_path)
+        yaml_path = load_yaml(yaml_path)[binschemes_names][0]
+        binschemes = load_yaml(yaml_path)
 
         # Arguments for sagas.get_out_dirs_list()
         sep='_'
@@ -113,7 +112,7 @@ for result_name in result_names:
         asym_key   = result_name #NOTE: This is set from above
         err_ext    = '_err'
 
-        # Arguments for sagas.plot_results()
+        # Arguments for sagas.plot.plot_results()
         plot_results_kwargs_base = {
             'ylims':[-0.05,0.2],
             'sgasyms':[0.0,0.1,0.0],
@@ -208,14 +207,14 @@ for result_name in result_names:
             # Load bin migration matrix and invert
             bin_mig_df, bin_mig_mat, inv_bin_mig_mat = None, None, None
             if use_bin_mig:
-                bin_mig_df = sagas.load_csv(bin_mig_path)
+                bin_mig_df = load_csv(bin_mig_path)
                 bin_mig_mat = sagas.get_bin_mig_mat(
                     bin_mig_df,
                     id_gen_key=id_gen_key,
                     id_rec_key=id_rec_key,
                     mig_key=mig_key,
                 )
-                sagas.save_bin_mig_mat_to_csv(
+                save_bin_mig_mat_to_csv(
                     bin_mig_mat,
                     base_dir='./',
                     basename=binscheme_name,
@@ -254,7 +253,7 @@ for result_name in result_names:
                     ) for outdir in out_dirs]
 
                 # Load pandas dataframes from the files
-                dfs = [sagas.load_csv(out_file_name,config=config,chain_configs=chain_configs) for out_file_name in out_file_names]
+                dfs = [load_csv(out_file_name,config=config,chain_configs=chain_configs) for out_file_name in out_file_names]
 
                 # Apply bin migration correction
                 if use_bin_mig:
@@ -283,17 +282,17 @@ for result_name in result_names:
                 )
 
                 # Use default plotting settings
-                if use_default_plt_settings: sagas.set_default_plt_settings()
+                if use_default_plt_settings: set_default_plt_settings()
 
                 # Create figure and axes
                 f, ax = plt.subplots(figsize=figsize)
 
-                # Set additional arguments for saga.aggregate.plot_results()
+                # Set additional arguments for saga.plot.plot_results()
                 plot_results_kwargs_base['sgasyms'] = config['sgasyms']
                 plot_results_kwargs_base['outpath'] = config_out_path.replace(sep+result_name+ext,sector4_label+sep+result_name+ext)
 
                 # Plot the graph
-                sagas.plot_results(ax,**aggregate_graph,**plot_results_kwargs_base)
+                plot_results(ax,**aggregate_graph,**plot_results_kwargs_base)
 
                 # Save the graph
                 f.savefig(config_out_path)
