@@ -10,4 +10,4 @@
 ##SBATCH --gres=disk:1000
 #SBATCH --time=6:00:00
 
-$SSS_HOME/jobs/c12analysis/mc_rga/job.sh
+$SSS_HOME/jobs/c12analysis/mc_rga_sss/job.sh
