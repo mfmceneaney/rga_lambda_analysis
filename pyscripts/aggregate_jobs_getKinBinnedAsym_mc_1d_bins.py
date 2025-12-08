@@ -11,7 +11,7 @@ from saga.plot import set_default_plt_settings, plot_results
 # Set base directory from environment
 RGA_LAMBDA_ANALYSIS = os.environ['RGA_LAMBDA_ANALYSIS']
 
-# Setup configuration dictionary #NOTE: RGC HAS 6 ASYMMETRIES, RGH HAS 9 so just filter the states that inject up to 3 asymmetries
+# Setup configuration dictionary
 asyms = [-0.1,-0.01,0.0,0.01,0.1]
 sgasyms = {"sgasyms":[[a1] for a1 in asyms]}
 bsgasyms = {"bgasyms":[[a1] for a1 in asyms]}
@@ -280,3 +280,6 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
 
                 # Save the graph
                 f.savefig(config_out_path)
+
+                # Close the graph
+                plt.close()

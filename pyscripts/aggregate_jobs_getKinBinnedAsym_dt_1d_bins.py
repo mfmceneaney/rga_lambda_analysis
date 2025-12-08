@@ -285,3 +285,6 @@ for base_dir, ch_sgasym_label, ch in zip(base_dirs,ch_sgasym_labels,chs):
 
             # Save the graph
             f.savefig(config_out_path)
+
+            # Close the graph
+            plt.close()
