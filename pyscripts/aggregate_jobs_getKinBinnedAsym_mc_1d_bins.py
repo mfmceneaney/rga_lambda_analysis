@@ -9,14 +9,16 @@ from saga.data import load_yaml, load_csv, save_bin_mig_mat_to_csv
 from saga.plot import set_default_plt_settings, plot_results
 
 # Set base directory from environment
-RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
+RGA_LAMBDA_ANALYSIS = os.environ['RGA_LAMBDA_ANALYSIS']
 
-# Setup configuration dictionary
-asyms = [-0.2,-0.1,0.0,0.1,0.2]
-sgasyms = {"sgasyms":[[a1,a2,a3] for a1 in asyms for a2 in asyms for a3 in asyms]}
-seeds   = {"inject_seed":[2**i for i in range(1)]}
+# Setup configuration dictionary #NOTE: RGC HAS 6 ASYMMETRIES, RGH HAS 9 so just filter the states that inject up to 3 asymmetries
+asyms = [-0.1,-0.01,0.0,0.01,0.1]
+sgasyms = {"sgasyms":[[a1] for a1 in asyms]}
+bsgasyms = {"bgasyms":[[a1] for a1 in asyms]}
+seeds   = {"inject_seed":[2**i for i in range(16)]}
 configs = dict(
     sgasyms,
+    bgasyms
     **seeds,
 )
 
@@ -31,35 +33,32 @@ chain_configs = dict(
 ) if nbatch > 1 else {}
 
 # Set base directories to aggregate
-run_groups = ['mc_rga']
+run_groups = ['dt_rga']
 channels   = ['ppim']
+methods    = ["Asym", "HB"]
 base_dirs  = [
-    os.path.abspath(os.path.join(RGA_LAMBDA_ANALYSIS_HOME,f'jobs/saga/test_getKinBinnedAsym__{rg}__{ch}__1D/')) for rg in run_groups for ch in channels
+    os.path.abspath(
+        os.path.join(
+                RGA_LAMBDA_ANALYSIS,
+                f'jobs/saga/test_getKinBinned{method}__{rg}__{ch}__1D/'
+            )
+        ) for rg in run_groups for ch in channels for method in methods
 ]
 
-# Set channel labels
-ch_labels = {
-    'ppim':'p\pi^{-}',
-}
+# Set list of channels for each base directory
+chs = [ch for rg in run_groups for ch in channels for method in methods]
 
-# Set maps of asymmetry names to labels for each run group
+# Set channel label for each base directory
 ch_sgasym_labels = {
-    'mc_rga':{
-        ch:{
-            'a0':'$\mathcal{A}_{LUT}^{cos(\\phi_{'+ch_labels[ch]+'})}$',
-            'a1':'$\mathcal{A}_{LUT}^{Const}$',
-            'a2':'$\mathcal{A}_{LUT}^{cos(2\\phi_{'+ch_labels[ch]+'})}$',
-        } for ch in channels
-    }
+    'ppim':'$D^{\Lambda}_{LL\'}$',
 }
-
-# Set the signal asymmetry labels for each base directory
-ch_sgasym_labels = [ch_sgasym_labels[rg][ch] for rg in run_groups for ch in channels]
+ch_sgasym_labels = [ch_sgasym_labels[ch] for rg in run_groups for ch in channels]
 
 # Set x-axis labels for kinematic variables in all channels
 xlabel_map = {
-    'Q2':'$Q^{2}$ (GeV$^{2}$)', 'W':'$W$ (GeV)', 'x':'$x$', 'y':'$y$',
-    'z_ppim':'$z_{p\pi^{-}}$', 'xF_pipim':'$x_{F p\pi^{-}}$',
+    'Q2':'$Q^{2}$ (GeV$^{2}$)', 'W':'$W$ (GeV)', 'y':'$y$', 'x':'$x$', 
+    'z_ppim':'$z_{p\pi^{-}}$', 'xF_ppim':'$x_{F p\pi^{-}}$',
+    'mass_ppim':'$M_{p\pi^{-}}$ (GeV)',
 }
 
 # Set up list of run groups
@@ -78,7 +77,7 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
         #NOTE: Set the bin migration path below since this is binscheme dependent
 
         # Set aggregate keys
-        aggregate_keys = []
+        aggregate_keys = ["inject_seed"]
 
         # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
         binschemes_paths_name = "binschemes_paths"
@@ -111,13 +110,13 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
         asym_key   = result_name #NOTE: This is set from above
         err_ext    = '_err'
 
-        # Arguments for saga.plot.plot_results()
+        # Arguments for sagas.plot_results()
         plot_results_kwargs_base = {
-            'ylims':[-1.0,1.0],
-            'sgasyms':[], #NOTE: This will be set below for each configuration
+            'ylims':[-0.2,0.2],
+            'sgasyms':[0.0], #NOTE: This will be set below for each configuration
             'sgasym_idx':ch_sgasym_label_idx,
             'sgasym_labels':[ch_sgasym_label[el] for el in ch_sgasym_label],
-            'sg_colors':['blue','red','green'],
+            'sg_colors':['blue','red','green','tab:pink', 'tab:purple', 'tab:gray', 'tab:orange', 'tab:cyan'],
             'bgasyms':[],
             'bgasym_labels':[],
             'bg_colors':[],
@@ -126,6 +125,7 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
             'hist_colors':[],
             'hist_keys':[],
             'hist_labels':[],
+            'watermark':'CLAS12 Preliminary',
             'hist_clone_axis':False,
             'old_dat_path':None
         }
