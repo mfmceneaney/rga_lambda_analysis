@@ -1,0 +1,8 @@
+xF_ppim:
+  xF_ppim:
+    nbins: 10
+    lims: [-1.0,1.0]
+mass_ppim:
+  mass_ppim:
+    nbins: 10
+    lims: [1.08,1.24]
