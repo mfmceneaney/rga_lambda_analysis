@@ -5,20 +5,22 @@ nthreads: 8
 cuts: >-
   mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0
   && detector_p==6 && detector_pim==6
+  && vz_e>-10.0 && vz_e<2.5
 mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
-  sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0
-  && vz_e>-25.0 && vz_e<20.0
+  sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0
 particle_suffixes: ["_p","_pim"]
-var_formulas:
+var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
+  - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
+  - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
   - ["depoly","y"]
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
 binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"]
-binvars: ["Q2","x","xF_ppim","z_ppim"] #NOTE: INCLUDE ALL VARIABLE NAMES AND LIMITS TO AUTOMATICALLY APPLY OVERALL LIMIT CUTS
-binvar_lims: [[1,11],[0,1],[0,1],[0,1]]
-depolvars: ["depoly"]
+binvars: ["Q2", "W", "x", "y", "xF_ppim", "z_ppim"]
+binvar_lims: [[1,11], [2,5], [0,1], [0,1], [0,1], [0,1]]
+depolvars: ["depol0"]
 depolvar_lims: [[0,1]]
-asymfitvars: ["costhetaT","phi_h_ppim"]
-asymfitvar_lims: [[-1,1],[0,6.28]]
+asymfitvars: ["costheta1"]
+asymfitvar_lims: [[-1,1]]
 massfitvars: ["mass_ppim"]
 massfitvar_lims: [[1.08,1.24]]
 mc_suffix: "_mc"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=saga_getKinBinnedAsym
+#SBATCH --job-name=saga_getKinBinnedHB
 #SBATCH --output=/farm_out/%u/%x-%j-%N.out
 #SBATCH --error=/farm_out/%u/%x-%j-%N.err
 #SBATCH --partition=production
@@ -10,7 +10,7 @@
 ##SBATCH --gres=disk:5000
 #SBATCH --time=24:00:00
 
-export OUTDIR="$RGH_PROJECTIONS_HOME/jobs/saga/test_getKinBinnedAsym__dt_rga__ppim__1D"
+export OUTDIR="$RGH_PROJECTIONS_HOME/jobs/saga/test_getKinBinnedhB__mc_rga_sss__ppim__1D"
 export YAML="args.yaml"
 
 echo $OUTDIR
