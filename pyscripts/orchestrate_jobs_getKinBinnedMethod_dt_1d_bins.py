@@ -92,28 +92,32 @@ if args.massfit_types is not None:
                 asymfitvars = {"asymfitvars":args.asymfitvars}
                 binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
 
-                # Create list of mass fit yaml file maps
-                massfit_yamlfile_maps = [
-                    {
-                        f"scheme_{binscheme}_bin_{binid}": \
-                        os.path.join(
-                            YAML_DIR,
-                            f"massfit/{rg}/{massfit_type}/",
-                            f"scheme_{binvar}_bin_{binid}.yaml",
-                        ) for binid in range(len(get_binscheme_cuts_and_ids(binscheme)[2]))
-                        for binscheme in binschemes 
-                    } for massfit_type in args.massfit_types
-                ]
+# Create list of mass fit yaml file maps
+                massfit_yamlfile_maps = []
+                for massfit_type in args.massfit_types:
+                    massfit_yamlfile_map = {}
+                    for binscheme_dict in binschemes["binschemes"]:
+                        for binscheme_key in binscheme_dict:
+                            binscheme = binscheme_dict[binscheme_key]
+                            arg1, arg2, binids, arg4 = get_binscheme_cuts_and_ids(binscheme)
+                            for binid in range(len(binids)):
+                                massfit_yamlfile_map[f"scheme_{binscheme_key}_bin_{binid}"] = os.path.join(
+                                    YAML_DIR,
+                                    f"massfit/{rg}/{massfit_type}/",
+                                    f"scheme_{binscheme_key}_bin_{binid}.yaml",
+                                )
+                    massfit_yamlfile_maps.append(massfit_yamlfile_map)
 
                 # Print mass fit yaml file maps
                 for idx, massfit_yamlfile_map in enumerate(massfit_yamlfile_maps):
-                    print("INFO: massfit_yamlfile_maps["+idx+"] = {")
+                    print("INFO: massfit_yamlfile_maps["+str(idx)+"] = {")
                     for key in massfit_yamlfile_map:
                         print(f"INFO: \t{key}: {massfit_yamlfile_map[key]},")
                     print("INFO: }")
-                    massfit_yamlfile_maps = {
-                        "massfit_yamlfile_map": massfit_yamlfile_maps
-                    }
+                massfit_yamlfile_maps_list = massfit_yamlfile_maps
+                massfit_yamlfile_maps = {
+                    "massfit_yamlfile_map": massfit_yamlfile_maps_list
+                }
 
                 # Set aliases
                 aliases     = {
@@ -122,9 +126,9 @@ if args.massfit_types is not None:
                         for el in binschemes["binschemes"]
                     },
                     "massfit_yamlfile_map":{
-                        str(massfit_yamlfile_map):massfit_type \
+                        str(massfit_yamlfile_map):f"massfit_type_{massfit_type}" \
                         for massfit_type, massfit_yamlfile_map in \
-                        zip(args.massfit_types,massfit_yamlfile_maps)
+                        zip(args.massfit_types,massfit_yamlfile_maps_list)
                     },
                 }
 
@@ -167,7 +171,7 @@ if args.cos_phi:
                 cuts = args_yaml["cuts"]
                 cuts_pos_cos_phi = cuts + " && !(phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
                 cuts_neg_cos_phi = cuts + " && (phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
-                cutss = {"cuts",[cuts_pos_cos_phi,cuts_neg_cos_phi]}
+                cutss = {"cuts":[cuts_pos_cos_phi,cuts_neg_cos_phi]}
                 aliases     = {
                     "cuts":{
                         cuts_pos_cos_phi:"pos_cos_phi",
@@ -301,7 +305,7 @@ if args.splot:
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
 
                 # Create job submission structure with fit variables and cos phi cuts
-                binschemes  = load_yaml(yaml_path)
+                binschemes  = load_yaml(binscheme_yaml_path)
                 asymfitvars = {"asymfitvars":args.asymfitvars}
                 binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
                 use_splot   = {"use_splot": [True]}

@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import argparse
+import sys
 
 # Import saga modules
 import saga.aggregate as sagas
@@ -128,7 +129,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
             'ylims':[-0.2,0.2],
             'sgasyms':[0.0], #NOTE: This will be set below for each configuration
             'sgasym_idx':ch_sgasym_label_idx,
-            'sgasym_labels':[ch_sgasym_label[el] for el in ch_sgasym_label],
+            'sgasym_labels':[ch_sgasym_label],
             'sg_colors':['red','blue','green','tab:pink', 'tab:purple', 'tab:gray', 'tab:orange', 'tab:cyan'],
             'bgasyms':[],
             'bgasym_labels':[],
@@ -172,13 +173,14 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         aliases = None
         aggregate_keys = args.aggregate_keys
 
-        # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
-        binschemes_paths_name = "binschemes_paths"
-        binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
-        binschemes = load_yaml(binscheme_yaml_path)
+        # # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
+        # binschemes_paths_name = "binschemes_paths"
+        # binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
+        # binschemes = load_yaml(binscheme_yaml_path)
+        binschemes = None
 
         # Aggregate basic asymmetry injections
-        if sgasyms and bgasyms:
+        if args.sgasyms and args.bgasyms:
 
             # Create job submission structure
             asymfitvars = {"asymfitvars":args.asymfitvars}
@@ -195,11 +197,11 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
                 **seeds
             )
             if args.splot:
-                splot = {"use_splot":True}
-                config.update(splot)
+                splot = {"use_splot":[True]}
+                configs.update(splot)
 
         # Aggregate extra signal asymmetry
-        elif sgasyms and sgasyms2:
+        elif args.sgasyms and args.sgasyms2:
 
             # Create job submission structure
             sgasyms = {"sgasyms":[[a1,a2] for a1 in args.sgasyms for a2 in args.sgasyms2]}
@@ -225,8 +227,8 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
                 **seeds
             )
             if args.splot:
-                splot = {"use_splot":True}
-                config.update(splot)
+                splot = {"use_splot":[True]}
+                configs.update(splot)
 
         # Aggregate signal pdf types
         elif args.massfit_types is not None:
@@ -240,27 +242,31 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
             binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
 
             # Create list of mass fit yaml file maps
-            massfit_yamlfile_maps = [
-                {
-                    f"scheme_{binscheme}_bin_{binid}": \
-                    os.path.join(
-                        YAML_DIR,
-                        f"massfit/{rg}/{massfit_type}/",
-                        f"scheme_{binvar}_bin_{binid}.yaml",
-                    ) for binid in range(len(get_binscheme_cuts_and_ids(binscheme)[2]))
-                    for binscheme in binschemes 
-                } for massfit_type in args.massfit_types
-            ]
+            massfit_yamlfile_maps = []
+            for massfit_type in args.massfit_types:
+                massfit_yamlfile_map = {}
+                for binscheme_dict in binschemes["binschemes"]:
+                    for binscheme_key in binscheme_dict:
+                        binscheme = binscheme_dict[binscheme_key]
+                        arg1, arg2, binids, arg4 = get_binscheme_cuts_and_ids(binscheme)
+                        for binid in range(len(binids)):
+                            massfit_yamlfile_map[f"scheme_{binscheme_key}_bin_{binid}"] = os.path.join(
+                                YAML_DIR,
+                                f"massfit/{rg}/{massfit_type}/",
+                                f"scheme_{binscheme_key}_bin_{binid}.yaml",
+                            )
+                massfit_yamlfile_maps.append(massfit_yamlfile_map)
 
             # Print mass fit yaml file maps
             for idx, massfit_yamlfile_map in enumerate(massfit_yamlfile_maps):
-                print("INFO: massfit_yamlfile_maps["+idx+"] = {")
+                print("INFO: massfit_yamlfile_maps["+str(idx)+"] = {")
                 for key in massfit_yamlfile_map:
                     print(f"INFO: \t{key}: {massfit_yamlfile_map[key]},")
                 print("INFO: }")
-                massfit_yamlfile_maps = {
-                    "massfit_yamlfile_map": massfit_yamlfile_maps
-                }
+            massfit_yamlfile_maps_list = massfit_yamlfile_maps
+            massfit_yamlfile_maps = {
+                "massfit_yamlfile_map": massfit_yamlfile_maps_list
+            }
 
             # Set aliases
             aliases     = {
@@ -269,9 +275,9 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
                     for el in binschemes["binschemes"]
                 },
                 "massfit_yamlfile_map":{
-                    str(massfit_yamlfile_map):massfit_type \
+                    str(massfit_yamlfile_map):f"massfit_type_{massfit_type}" \
                     for massfit_type, massfit_yamlfile_map in \
-                    zip(args.massfit_types,massfit_yamlfile_maps)
+                    zip(args.massfit_types,massfit_yamlfile_maps_list)
                 },
             }
 
@@ -287,8 +293,8 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
                 **massfit_yamlfile_maps,
             )
             if args.splot:
-                splot = {"use_splot":True}
-                config.update(splot)
+                splot = {"use_splot":[True]}
+                configs.update(splot)
 
             # Reset binschemes
             binschemes  = load_yaml(binscheme_yaml_path)
@@ -305,7 +311,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
             cuts = args_yaml["cuts"]
             cuts_pos_cos_phi = cuts + " && !(phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
             cuts_neg_cos_phi = cuts + " && (phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
-            cutss = {"cuts",[cuts_pos_cos_phi,cuts_neg_cos_phi]}
+            cutss = {"cuts":[cuts_pos_cos_phi,cuts_neg_cos_phi]}
             aliases     = {
                 "cuts":{
                     cuts_pos_cos_phi:"pos_cos_phi",
@@ -326,8 +332,8 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
                 **seeds,
             )
             if args.splot:
-                splot = {"use_splot":True}
-                config.update(splot)
+                splot = {"use_splot":[True]}
+                configs.update(splot)
 
         else:
             print("INFO: No usable configuration found, exiting.")

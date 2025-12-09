@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import argparse
+import sys
 
 # Import saga modules
 import saga.aggregate as sagas
@@ -171,12 +172,12 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
     # Initialize configs
     configs = None
     aliases = None
-    aggregate_keys = args.aggregate_keys
 
-    # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
-    binschemes_paths_name = "binschemes_paths"
-    binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
-    binschemes = load_yaml(binscheme_yaml_path)
+    # # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
+    # binschemes_paths_name = "binschemes_paths"
+    # binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
+    # binschemes = load_yaml(binscheme_yaml_path)
+    binschemes = None
 
     # Aggregate with crystal ball signal
     if args.basic:
@@ -280,7 +281,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         cuts = args_yaml["cuts"]
         cuts_pos_cos_phi = cuts + " && !(phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
         cuts_neg_cos_phi = cuts + " && (phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
-        cutss = {"cuts",[cuts_pos_cos_phi,cuts_neg_cos_phi]}
+        cutss = {"cuts":[cuts_pos_cos_phi,cuts_neg_cos_phi]}
         aliases     = {
             "cuts":{
                 cuts_pos_cos_phi:"pos_cos_phi",
