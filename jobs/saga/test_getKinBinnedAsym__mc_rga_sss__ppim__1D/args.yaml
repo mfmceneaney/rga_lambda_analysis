@@ -61,7 +61,7 @@ var_formulas: #NOTE: Variable definitions will be applied in order in case of de
   - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
   - ["depoly","y"]
   - ["depol0_mc","(float)(y_mc*(1.0-0.5*y_mc)/(1.0-y_mc+0.5*y_mc*y_mc))"]
-  - ["depol1_mc","(float)(y_mc*sqrt(1.0-y_mc)/(1.0-y_mc+0.5*y_mc*_mc))"]
+  - ["depol1_mc","(float)(y_mc*sqrt(1.0-y_mc)/(1.0-y_mc+0.5*y_mc*y_mc))"]
   - ["depoly_mc","y_mc"]
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
 binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"] #NOTE: You can alternately load a bin scheme from another YAML file if you do not put a map under `binschemes` above.
