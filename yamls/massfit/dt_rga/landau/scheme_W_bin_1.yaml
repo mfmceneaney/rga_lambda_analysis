@@ -1,0 +1,25 @@
+massfit_pdf_name: "ln_cheb2" #NOTE: A mass fit and background correction will only be used if this is not empty.
+massfit_formula_sg: "landau(x[0],x[1],x[2],x[3])" #NOTE: This is parsed by RooGenericPdf using TFormula
+massfit_formula_bg: "cheb2((x[0]-1.08)/(1.24-1.08),x[1],x[2],x[3])" #NOTE: This is parsed by RooGenericPdf using TFormula
+massfit_sgYield_name: "sgYield"
+massfit_bgYield_name: "bgYield"
+massfit_initsgfrac: 0.1
+massfit_parnames_sg: ["C","mu","sigma"]
+massfit_partitles_sg: ["C","#mu","#sigma"]
+massfit_parunits_sg: ["","(GeV)", "(GeV)"]
+massfit_parinits_sg: [1.0, 1.1157, 0.008]
+massfit_parlims_sg: [ [1.0, 1.0], [0.0, 2.0], [0.0, 10.0]]
+massfit_parnames_bg: ["offset", "a1", "a2"]
+massfit_partitles_bg: ["offset", "a1", "a2"]
+massfit_parunits_bg: ["(GeV)", "(GeV)^{-1}", "(GeV)^{-2}"]
+massfit_parinits_bg: [1.24, 0.0, -0.2]
+massfit_parlims_bg: [ [1.08, 2.0], [-10.0, 10.0], [-10.0, 10.0] ]
+massfit_fitwindow_lims: [ [1.08, 1.24] ]
+massfit_sgregion_lims: [ [1.11, 1.13] ]
+massfit_lg_text_size: 0.04
+massfit_lg_margin: 0.1
+massfit_lg_ncols: 2
+massfit_plot_bg_pars: false
+massfit_use_sumw2error: false
+massfit_use_extended_nll: true
+massfit_use_binned_fit: false
