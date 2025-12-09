@@ -11,17 +11,6 @@ from saga.plot import set_default_plt_settings, plot_results
 # Set base directory from environment
 RGA_LAMBDA_ANALYSIS = os.environ['RGA_LAMBDA_ANALYSIS']
 
-# Setup configuration dictionary
-asyms = [-0.1,-0.01,0.0,0.01,0.1]
-sgasyms = {"sgasyms":[[a1] for a1 in asyms]}
-bsgasyms = {"bgasyms":[[a1] for a1 in asyms]}
-seeds   = {"inject_seed":[2**i for i in range(16)]}
-configs = dict(
-    sgasyms,
-    bgasyms
-    **seeds,
-)
-
 # Set up chaining for batched data (specifically `old_dat_path`)
 nbatch = 1
 nbatches = {"nbatches":[nbatch]}
@@ -152,6 +141,24 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
             )
 
         #---------- Set configurations ----------#
+        # Setup configuration dictionary
+        # Create job submission structure
+        asyms = [-0.1,-0.01,0.0,0.01,0.1]
+        asymfitvars = {"asymfitvars":["costheta1","costheta2","costhetaT","costhetaTy"]}
+        sgasyms = {"sgasyms":[[a1] for a1 in asyms]}
+        bgasyms = {"bgasyms":[[a1] for a1 in asyms]}
+        seeds   = {"inject_seed":[2**i for i in range(16)]}
+
+        # Set job file paths and configs
+        configs = dict(
+            asymfitvars,
+            **sgasyms,
+            **bgasyms,
+            **seeds
+        )
+
+        #TODO: ALLOW OPTIONS FOR DIFFERENT CONFIGS
+
         # Get list of configurations
         config_list = sagas.get_config_list(configs,aggregate_keys=aggregate_keys)
 

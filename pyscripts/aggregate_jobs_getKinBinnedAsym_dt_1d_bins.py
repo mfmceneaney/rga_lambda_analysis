@@ -11,8 +11,6 @@ from saga.plot import set_default_plt_settings, plot_results
 # Set base directory from environment
 RGA_LAMBDA_ANALYSIS = os.environ['RGA_LAMBDA_ANALYSIS']
 
-# Setup configuration dictionary
-
 # Set up chaining for batched data (specifically `old_dat_path`)
 nbatch = 1
 nbatches = {"nbatches":[nbatch]}
@@ -22,9 +20,6 @@ chain_configs = dict(
     nbatches,
     **ibatches,
 ) if nbatch > 1 else {}
-
-# Set sector4 label
-sector4_label = '' #NOTE: USE '_sector4' if you want to aggregate and rescale the sector4 jobs.
 
 # Set base directories to aggregate
 run_groups = ['dt_rga']
@@ -147,6 +142,26 @@ for base_dir, ch_sgasym_label, ch in zip(base_dirs,ch_sgasym_labels,chs):
         )
 
     #---------- Set configurations ----------#
+    # Setup configuration dictionary
+    # Split binschemes with aliases
+    binschemes  = load_yaml(yaml_path)
+    asymfitvars = {"asymfitvars":["costheta1","costheta2","costhetaT","costhetaTy"]}
+    binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
+    aliases     = {
+        "binschemes":{
+            str(el):list(el.keys())[0]+"_binscheme"
+            for el in binschemes["binschemes"]
+        }
+    }
+
+    # Set job file paths and configs
+    configs = dict(
+        asymfitvars,
+        **binschemes,
+    )
+
+    #TODO: ALLOW OPTIONS FOR DIFFERENT CONFIGS
+
     # Get list of configurations
     config_list = sagas.get_config_list(configs,aggregate_keys=aggregate_keys)
 
