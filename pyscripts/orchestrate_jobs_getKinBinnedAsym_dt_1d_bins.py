@@ -11,7 +11,7 @@ from saga.aggregate import get_scheme_vars, get_binscheme_cuts_and_ids
 parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA data for the `Lambda -> proton pion` channel')
 parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
 parser.add_argument('--basic', default=True, help='Submit sideband subtraction asymmetry extraction jobs')
-parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gauss","doublegauss","landau","breitwigner","crystalball"])
+parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
 parser.add_argument('--cos_phi', default=False, help='Submit cos_phi difference jobs')
 parser.add_argument('--no_sbs', default=False, help='Submit no sb subtraction jobs')
 parser.add_argument('--splot', default=False, help='Submit sPlot asymmetry extraction jobs')
@@ -69,7 +69,7 @@ if args.basic:
             create_jobs(configs,base_dir,submit_path,yaml_path,aliases=aliases,replacements=replacements)
             submit_jobs(configs,base_dir,submit_path,out_path,aliases=aliases,dry_run=dry_run)
 
-# Loop run groups and channels with gaussian signal
+# Loop run groups and channels with gausian signal
 if args.massfit_types is not None:
     for massfit_type in massfit_types:
 

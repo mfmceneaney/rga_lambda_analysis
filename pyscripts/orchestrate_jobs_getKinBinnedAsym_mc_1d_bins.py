@@ -9,7 +9,7 @@ from saga.orchestrate import create_jobs, submit_jobs
 parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA MC for the `Lambda -> proton pion` channel')
 parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
 parser.add_argument('--splot', default=False, help='Submit splot asymmetry extraction jobs')
-parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gauss","doublegauss","landau","breitwigner","crystalball"])
+parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
 parser.add_argument('--cos_phi', default=False, help='Submit cos_phi difference jobs')
 parser.add_argument('--n_inject_seeds', default=16, help='Number of random injection seeds to use')
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
