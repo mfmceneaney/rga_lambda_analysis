@@ -2,14 +2,32 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import argparse
 
 # Import saga modules
 import saga.aggregate as sagas
 from saga.data import load_yaml, load_csv, save_bin_mig_mat_to_csv
 from saga.plot import set_default_plt_settings, plot_results
 
+# Parse arguments
+parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA MC for the `Lambda -> proton pion` channel')
+parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
+parser.add_argument('--splot', default=False, help='Aggregate splot asymmetry extraction jobs')
+parser.add_argument('--massfit_types', default=None, help='Aggregate mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
+parser.add_argument('--cos_phi', default=False, help='Aggregate cos_phi difference jobs')
+parser.add_argument('--n_inject_seeds', default=16, help='Number of random injection seeds to use')
+parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
+parser.add_argument('--sgasyms', default=None, help='Signal asymmetries injected', nargs="*", type=float)
+parser.add_argument('--bgasyms', default=None, help='Background asymmetries injected', nargs="*", type=float)
+parser.add_argument('--sgasyms2', default=None, help='Signal asymmetries injected for additional cos_phi dependent signal term', nargs="*", type=float)
+parser.add_argument('--rgs', default=["mc_rga"], help='Run group', nargs="+", choices=["mc_rga","mc_rga_sss"])
+parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])
+parser.add_argument('--aggregate_keys', default=["inject_seed"], help='Keys over which to aggregate results', nargs="+", choices=["inject_seed"])
+args = parser.parse_args()
+
+
 # Set base directory from environment
-RGA_LAMBDA_ANALYSIS = os.environ['RGA_LAMBDA_ANALYSIS']
+RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
 
 # Set up chaining for batched data (specifically `old_dat_path`)
 nbatch = 1
@@ -22,39 +40,45 @@ chain_configs = dict(
 ) if nbatch > 1 else {}
 
 # Set base directories to aggregate
-run_groups = ['dt_rga']
+run_groups = args.rgs
 channels   = ['ppim']
-methods    = ["Asym", "HB"]
+methods    = args.methods
 base_dirs  = [
     os.path.abspath(
         os.path.join(
-                RGA_LAMBDA_ANALYSIS,
+                RGA_LAMBDA_ANALYSIS_HOME,
                 f'jobs/saga/test_getKinBinned{method}__{rg}__{ch}__1D/'
             )
         ) for rg in run_groups for ch in channels for method in methods
 ]
+YAML_DIR = os.path.abspath(
+    os.path.join(
+        RGA_LAMBDA_ANALYSIS_HOME,
+        'yamls'
+    )
+)
 
 # Set list of channels for each base directory
 chs = [ch for rg in run_groups for ch in channels for method in methods]
 
 # Set channel label for each base directory
 ch_sgasym_labels = {
-    'ppim':'$D^{\Lambda}_{LL\'}$',
+    'ppim':'$D^{\\Lambda}_{LL\'}$',
 }
-ch_sgasym_labels = [ch_sgasym_labels[ch] for rg in run_groups for ch in channels]
+ch_sgasym_labels = [ch_sgasym_labels[ch] for rg in run_groups for ch in channels for method in methods]
 
 # Set x-axis labels for kinematic variables in all channels
 xlabel_map = {
     'Q2':'$Q^{2}$ (GeV$^{2}$)', 'W':'$W$ (GeV)', 'y':'$y$', 'x':'$x$', 
-    'z_ppim':'$z_{p\pi^{-}}$', 'xF_ppim':'$x_{F p\pi^{-}}$',
-    'mass_ppim':'$M_{p\pi^{-}}$ (GeV)',
+    'z_ppim':'$z_{p\\pi^{-}}$', 'xF_ppim':'$x_{F p\\pi^{-}}$',
+    'mass_ppim':'$M_{p\\pi^{-}}$ (GeV)',
 }
 
 # Set up list of run groups
-rgs = [ rg for rg in run_groups for ch in channels]
+rgs = [ rg for rg in run_groups for ch in channels for method in methods]
 
 # Loop base directories
-for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
+for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels):
 
     # Now loop signal asymmetries
     for ch_sgasym_label_idx, result_name in enumerate(ch_sgasym_label):
@@ -65,13 +89,13 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
         out_path     = os.path.join(base_dir,"jobs.txt")
         #NOTE: Set the bin migration path below since this is binscheme dependent
 
-        # Set aggregate keys
-        aggregate_keys = ["inject_seed"]
+        # # Set aggregate keys
+        # aggregate_keys = args.aggregate_keys
 
-        # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
-        binschemes_paths_name = "binschemes_paths"
-        yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
-        binschemes = load_yaml(yaml_path)
+        # # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
+        # binschemes_paths_name = "binschemes_paths"
+        # yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
+        # binschemes = load_yaml(yaml_path)
 
         # # Arguments for sagas.get_config_list() #NOTE: Set this above
         # result_name = "a0" #NOTE: This also gets recycled as the asymmetry name
@@ -105,7 +129,7 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
             'sgasyms':[0.0], #NOTE: This will be set below for each configuration
             'sgasym_idx':ch_sgasym_label_idx,
             'sgasym_labels':[ch_sgasym_label[el] for el in ch_sgasym_label],
-            'sg_colors':['blue','red','green','tab:pink', 'tab:purple', 'tab:gray', 'tab:orange', 'tab:cyan'],
+            'sg_colors':['red','blue','green','tab:pink', 'tab:purple', 'tab:gray', 'tab:orange', 'tab:cyan'],
             'bgasyms':[],
             'bgasym_labels':[],
             'bg_colors':[],
@@ -142,22 +166,177 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
 
         #---------- Set configurations ----------#
         # Setup configuration dictionary
-        # Create job submission structure
-        asyms = [-0.1,-0.01,0.0,0.01,0.1]
-        asymfitvars = {"asymfitvars":["costheta1","costheta2","costhetaT","costhetaTy"]}
-        sgasyms = {"sgasyms":[[a1] for a1 in asyms]}
-        bgasyms = {"bgasyms":[[a1] for a1 in asyms]}
-        seeds   = {"inject_seed":[2**i for i in range(16)]}
 
-        # Set job file paths and configs
-        configs = dict(
-            asymfitvars,
-            **sgasyms,
-            **bgasyms,
-            **seeds
-        )
+        # Initialize configs
+        configs = None
+        aliases = None
+        aggregate_keys = args.aggregate_keys
 
-        #TODO: ALLOW OPTIONS FOR DIFFERENT CONFIGS
+        # Load the binschemes from the path specified in the job yaml assuming there is only one given path and it is an absolute path
+        binschemes_paths_name = "binschemes_paths"
+        binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
+        binschemes = load_yaml(binscheme_yaml_path)
+
+        # Aggregate basic asymmetry injections
+        if sgasyms and bgasyms:
+
+            # Create job submission structure
+            asymfitvars = {"asymfitvars":args.asymfitvars}
+            sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
+            bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
+            seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
+            aliases = None
+
+            # Set job file paths and configs
+            configs = dict(
+                asymfitvars,
+                **sgasyms,
+                **bgasyms,
+                **seeds
+            )
+            if args.splot:
+                splot = {"use_splot":True}
+                config.update(splot)
+
+        # Aggregate extra signal asymmetry
+        elif sgasyms and sgasyms2:
+
+            # Create job submission structure
+            sgasyms = {"sgasyms":[[a1,a2] for a1 in args.sgasyms for a2 in args.sgasyms2]}
+            asymfitvars = args.asymfitvars
+            asymfitvars = {"asymfitvars":[[afv,"phi_h_ppim"] for afv in asymfitvars]}
+            seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
+            fsgasyms_xs_pu_formula = f"(float)({os.environ['RGA_LAMBDA_ANALYSIS_PDG_ALPHA']}*depol1*sgasyms[0]*asymfitvars[0])"
+            fsgasyms = {
+                "fsgasyms_xs_pu_formula": [fsgasyms_xs_pu_formula],
+            }
+            aliases  = {
+                "fsgasyms_xs_pu_formula":{
+                    str(el):"2ASYM"
+                    for el in fsgasyms["fsgasyms_xs_pu_formula"]
+                },
+            }
+
+            # Set job file paths and configs
+            configs = dict(
+                asymfitvars,
+                **fsgasyms,
+                **sgasyms,
+                **seeds
+            )
+            if args.splot:
+                splot = {"use_splot":True}
+                config.update(splot)
+
+        # Aggregate signal pdf types
+        elif args.massfit_types is not None:
+
+            # Create job submission structure
+            # binschemes  = load_yaml(binscheme_yaml_path)
+            asymfitvars = {"asymfitvars":args.asymfitvars}
+            sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
+            bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
+            seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
+            binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
+
+            # Create list of mass fit yaml file maps
+            massfit_yamlfile_maps = [
+                {
+                    f"scheme_{binscheme}_bin_{binid}": \
+                    os.path.join(
+                        YAML_DIR,
+                        f"massfit/{rg}/{massfit_type}/",
+                        f"scheme_{binvar}_bin_{binid}.yaml",
+                    ) for binid in range(len(get_binscheme_cuts_and_ids(binscheme)[2]))
+                    for binscheme in binschemes 
+                } for massfit_type in args.massfit_types
+            ]
+
+            # Print mass fit yaml file maps
+            for idx, massfit_yamlfile_map in enumerate(massfit_yamlfile_maps):
+                print("INFO: massfit_yamlfile_maps["+idx+"] = {")
+                for key in massfit_yamlfile_map:
+                    print(f"INFO: \t{key}: {massfit_yamlfile_map[key]},")
+                print("INFO: }")
+                massfit_yamlfile_maps = {
+                    "massfit_yamlfile_map": massfit_yamlfile_maps
+                }
+
+            # Set aliases
+            aliases     = {
+                "binschemes":{
+                    str(el):list(el.keys())[0]+"_binscheme"
+                    for el in binschemes["binschemes"]
+                },
+                "massfit_yamlfile_map":{
+                    str(massfit_yamlfile_map):massfit_type \
+                    for massfit_type, massfit_yamlfile_map in \
+                    zip(args.massfit_types,massfit_yamlfile_maps)
+                },
+            }
+
+            # Set replacements
+            replacements = None
+
+            # Set job file paths and configs
+            configs = dict(
+                asymfitvars,
+                **sgasyms,
+                **bgasyms,
+                **seeds,
+                **massfit_yamlfile_maps,
+            )
+            if args.splot:
+                splot = {"use_splot":True}
+                config.update(splot)
+
+            # Reset binschemes
+            binschemes  = load_yaml(binscheme_yaml_path)
+
+        # Aggregate 2 cos phi regions
+        elif args.cos_phi:
+            # Create job submission structure with fit variables and cos phi cuts
+            asymfitvars = {"asymfitvars":args.asymfitvars}
+            sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
+            bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
+            seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
+            args_yaml_path = os.path.join(base_dir,"args.yaml")
+            args_yaml = load_yaml(args_yaml_path)
+            cuts = args_yaml["cuts"]
+            cuts_pos_cos_phi = cuts + " && !(phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
+            cuts_neg_cos_phi = cuts + " && (phi_h_ppim<TMath::Pi()/2 || phi_h_ppim>=3*TMath::Pi()/2)"
+            cutss = {"cuts",[cuts_pos_cos_phi,cuts_neg_cos_phi]}
+            aliases     = {
+                "cuts":{
+                    cuts_pos_cos_phi:"pos_cos_phi",
+                    cuts_neg_cos_phi:"neg_cos_phi",
+                }
+            }
+
+            # Set replacements
+            binscheme_yaml_path = os.path.join(YAML_DIR,f"out_full_bin_{ch}.yaml")
+            binschemes = load_yaml(yaml_path)
+
+            # Set job file paths and configs
+            configs = dict(
+                asymfitvars,
+                **cutss,
+                **sgasyms,
+                **bgasyms,
+                **seeds,
+            )
+            if args.splot:
+                splot = {"use_splot":True}
+                config.update(splot)
+
+        else:
+            print("INFO: No usable configuration found, exiting.")
+            sys.exit(0)
+
+        # Check configs
+        if configs is None:
+            print("INFO: No usable configuration found, exiting.")
+            sys.exit(0)
 
         # Get list of configurations
         config_list = sagas.get_config_list(configs,aggregate_keys=aggregate_keys)
@@ -166,7 +345,8 @@ for rg, base_dir, ch_sgasym_label in zip(rgs,base_dirs,ch_sgasym_labels):
         out_dirs_list = sagas.get_out_dirs_list(
                                         configs,
                                         base_dir,
-                                        aggregate_keys=aggregate_keys
+                                        aggregate_keys=aggregate_keys,
+                                        aliases=aliases
                                     )
 
         #---------- Loop bin schemes ----------#
