@@ -13,6 +13,7 @@ from saga.plot import set_default_plt_settings, plot_results
 # Parse arguments
 parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA MC for the `Lambda -> proton pion` channel')
 parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
+parser.add_argument('--use_bin_mig', default=False, help='Use bin migration correction')
 parser.add_argument('--splot', default=False, help='Aggregate splot asymmetry extraction jobs')
 parser.add_argument('--massfit_types', default=None, help='Aggregate mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
 parser.add_argument('--cos_phi', default=False, help='Aggregate cos_phi difference jobs')
@@ -58,6 +59,9 @@ YAML_DIR = os.path.abspath(
         'yamls'
     )
 )
+
+# Set bin migration correction option
+use_bin_mig = args.use_bin_mig
 
 # Set list of channels for each base directory
 chs = [ch for rg in run_groups for ch in channels for method in methods]
@@ -110,7 +114,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         bin_mig_base_name="bin_mig_mat_"
 
         # Arguments for sagas.apply_bin_mig()
-        use_bin_mig = False
+        # use_bin_mig = False
         id_gen_key='binid_gen'
         id_rec_key='binid_rec'
         mig_key='mig'

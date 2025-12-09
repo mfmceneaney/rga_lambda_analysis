@@ -22,6 +22,7 @@ parser.add_argument('--splot', default=False, help='Aggregate sPlot asymmetry ex
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
 parser.add_argument('--rgs', default=["dt_rga"], help='Run group', nargs="+", choices=["dt_rga"])
 parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])
+parser.add_argument('--use_bin_mig', default=False, help='Use bin migration correction')
 args = parser.parse_args()
 
 # Set base directory from environment
@@ -55,6 +56,9 @@ YAML_DIR = os.path.abspath(
         'yamls'
     )
 )
+
+# Set bin migration correction option
+use_bin_mig = args.use_bin_mig
 
 # Set list of channels for each base directory
 chs = [ch for rg in run_groups for ch in channels for method in methods]
@@ -104,7 +108,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
     bin_mig_base_name="bin_mig_mat_"
 
     # Arguments for sagas.apply_bin_mig()
-    use_bin_mig = False
+    # use_bin_mig = False
     id_gen_key='binid_gen'
     id_rec_key='binid_rec'
     mig_key='mig'
