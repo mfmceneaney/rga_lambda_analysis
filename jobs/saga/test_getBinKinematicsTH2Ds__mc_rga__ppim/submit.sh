@@ -19,5 +19,5 @@ echo $YAML
 cd $OUTDIR
 ls -lrth
 pwd
-RGA_LAMBDA_ANALYSIS_SAGA_COMMAND "getBinKinematics $YAML"
+RGA_LAMBDA_ANALYSIS_SAGA_COMMAND "getBinKinematicsTH2Ds $YAML"
 echo DONE

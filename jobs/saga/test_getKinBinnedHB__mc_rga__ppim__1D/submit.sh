@@ -19,5 +19,5 @@ echo $YAML
 cd $OUTDIR
 ls -lrth
 pwd
-RGA_LAMBDA_ANALYSIS_SAGA_COMMAND "getKinBinnedAsym $YAML"
+RGA_LAMBDA_ANALYSIS_SAGA_COMMAND "getKinBinnedHB $YAML"
 echo DONE
