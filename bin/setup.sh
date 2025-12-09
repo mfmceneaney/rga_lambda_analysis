@@ -13,6 +13,8 @@ done
 
 # Modify argument yamls
 for file in $RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/*/args*.yaml; do
+    sed -i.bak "s;RGA_LAMBDA_ANALYSIS_VOL_DIR;$RGA_LAMBDA_ANALYSIS_VOL_DIR;g" $file
+    sed -i.bak "s;RGA_LAMBDA_ANALYSIS_HOME;$RGA_LAMBDA_ANALYSIS_HOME;g" $file
     sed -i.bak "s;RGA_LAMBDA_ANALYSIS_PDG_ALPHA;$RGA_LAMBDA_ANALYSIS_PDG_ALPHA;g" $file
     sed -i.bak "s;DT_RGA_BEAM_POLARIZATION;$DT_RGA_BEAM_POLARIZATION;g" $file
     sed -i.bak "s;MC_RGA_BEAM_POLARIZATION;$MC_RGA_BEAM_POLARIZATION;g" $file
