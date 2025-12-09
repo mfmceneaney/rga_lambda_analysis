@@ -10,7 +10,7 @@
 ##SBATCH --gres=disk:1000
 #SBATCH --time=24:00:00
 
-export OUTDIR="$RGH_PROJECTIONS_HOME/jobs/saga/test_getBinKinematics__pi"
+export OUTDIR="$RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/test_getBinKinematics__pi"
 export YAML="args.yaml"
 
 echo $OUTDIR
@@ -19,5 +19,5 @@ echo $YAML
 cd $OUTDIR
 ls -lrth
 pwd
-RGH_SAGA_COMMAND "getBinKinematics $YAML"
+RGA_LAMBDA_ANALYSIS_SAGA_COMMAND "getBinKinematics $YAML"
 echo DONE
