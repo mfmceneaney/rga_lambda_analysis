@@ -65,7 +65,7 @@ export RGA_LAMBDA_ANALYSIS_ROOT_FILES_DIR="$RGA_LAMBDA_ANALYSIS_VOL_DIR/root_fil
 export RGA_LAMBDA_ANALYSIS_NFILES=$(( ($RGA_LAMBDA_ANALYSIS_NEVENTS + $RGA_LAMBDA_ANALYSIS_NMAX - 1) / $RGA_LAMBDA_ANALYSIS_NMAX )) # Calculate number of files needed
 
 # Set project HIPO data paths for CLAS12-Analysis
-export MC_RGA_SSS_DIR="$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga_sss/dst"
+export MC_RGA_SSS_DIR="$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/simulation/mc_rga_sss/dst"
 
 # Set command for gemc
 RGA_LAMBDA_ANALYSIS_GEMC_COMMAND() {

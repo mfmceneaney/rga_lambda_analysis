@@ -72,7 +72,7 @@ setenv RGA_LAMBDA_ANALYSIS_ROOT_FILES_DIR "$RGA_LAMBDA_ANALYSIS_VOL_DIR/root_fil
 setenv RGA_LAMBDA_ANALYSIS_NFILES $RGA_LAMBDA_ANALYSIS_NFILES
 
 # Set project HIPO data paths for CLAS12-Analysis
-setenv MC_RGA_SSS_DIR "$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga_sss/dst"
+setenv MC_RGA_SSS_DIR "$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/simulation/mc_rga_sss/dst"
 
 # Define helper commands as aliases that call sh -c to preserve original bash behavior
 alias RGA_LAMBDA_ANALYSIS_GEMC_COMMAND 'sh -c "apptainer exec -B \$RGA_LAMBDA_ANALYSIS_VOL_DIR,\$RGA_LAMBDA_ANALYSIS_HOME,\$RGA_LAMBDA_ANALYSIS_C12_CONFIG_HOME \$RGA_LAMBDA_ANALYSIS_GEMC_IMG bash -c \"module use /cvmfs/oasis.opensciencegrid.org/jlab/geant4/modules; module load gemc/\$RGA_LAMBDA_ANALYSIS_GEMC_VERSION; setenv GEMC_DATA_DIR=/cvmfs/oasis.opensciencegrid.org/jlab/geant4/almalinux9-gcc11/clas12Tags/\$RGA_LAMBDA_ANALYSIS_GEMC_VERSION; gemc \" \!*"'
