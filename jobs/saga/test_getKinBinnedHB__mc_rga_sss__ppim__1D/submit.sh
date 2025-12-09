@@ -10,7 +10,7 @@
 ##SBATCH --gres=disk:5000
 #SBATCH --time=24:00:00
 
-export OUTDIR="$RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/test_getKinBinnedhB__mc_rga_sss__ppim__1D"
+export OUTDIR="$RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/test_getKinBinnedHB__mc_rga_sss__ppim__1D"
 export YAML="args.yaml"
 
 echo $OUTDIR
