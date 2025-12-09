@@ -12,11 +12,11 @@ from saga.plot import set_default_plt_settings, plot_results
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA MC for the `Lambda -> proton pion` channel')
-parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
-parser.add_argument('--use_bin_mig', default=False, help='Use bin migration correction')
-parser.add_argument('--splot', default=False, help='Aggregate splot asymmetry extraction jobs')
+parser.add_argument('--dry_run', action="store_true", help='Dry run without job submission')
+parser.add_argument('--use_bin_mig', action="store_true", help='Use bin migration correction')
+parser.add_argument('--splot', action="store_true", help='Aggregate splot asymmetry extraction jobs')
 parser.add_argument('--massfit_types', default=None, help='Aggregate mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
-parser.add_argument('--cos_phi', default=False, help='Aggregate cos_phi difference jobs')
+parser.add_argument('--cos_phi', action="store_true", help='Aggregate cos_phi difference jobs')
 parser.add_argument('--n_inject_seeds', default=16, help='Number of random injection seeds to use')
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
 parser.add_argument('--sgasyms', default=None, help='Signal asymmetries injected', nargs="*", type=float)

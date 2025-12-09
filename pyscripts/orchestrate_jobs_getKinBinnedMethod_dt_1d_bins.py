@@ -9,12 +9,12 @@ from saga.aggregate import get_scheme_vars, get_binscheme_cuts_and_ids
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Script to submit `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA data for the `Lambda -> proton pion` channel')
-parser.add_argument('--dry_run', default=True, help='Dry run without job submission')
-parser.add_argument('--basic', default=True, help='Submit sideband subtraction asymmetry extraction jobs')
+parser.add_argument('--dry_run', action="store_true", help='Dry run without job submission')
+parser.add_argument('--basic', action="store_true", help='Submit sideband subtraction asymmetry extraction jobs')
 parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
-parser.add_argument('--cos_phi', default=False, help='Submit cos_phi difference jobs')
-parser.add_argument('--no_sbs', default=False, help='Submit no sb subtraction jobs')
-parser.add_argument('--splot', default=False, help='Submit sPlot asymmetry extraction jobs')
+parser.add_argument('--cos_phi', action="store_true", help='Submit cos_phi difference jobs')
+parser.add_argument('--no_sbs', action="store_true", help='Submit no sb subtraction jobs')
+parser.add_argument('--splot', action="store_true", help='Submit sPlot asymmetry extraction jobs')
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
 parser.add_argument('--rgs', default=["dt_rga"], help='Run group', nargs="+", choices=["dt_rga"])
 parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])

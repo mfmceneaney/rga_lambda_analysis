@@ -13,16 +13,16 @@ from saga.plot import set_default_plt_settings, plot_results
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Script to aggregate `getKinBinnedAsym` and `getKinBinnedHB` jobs on RGA data for the `Lambda -> proton pion` channel')
-parser.add_argument('--basic', default=True, help='Aggregate sideband subtraction asymmetry extraction jobs')
+parser.add_argument('--basic', action="store_true", help='Aggregate sideband subtraction asymmetry extraction jobs')
 parser.add_argument('--massfit_types', default=None, help='Aggregate mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
-parser.add_argument('--cos_phi', default=False, help='Aggregate cos_phi difference jobs')
-parser.add_argument('--no_sbs_mass_ppim', default=False, help='Aggregate no sb subtraction jobs binned in mass_ppim')
-parser.add_argument('--no_sbs_xF_ppim', default=False, help='Aggregate no sb subtraction jobs binned in xF_ppim')
-parser.add_argument('--splot', default=False, help='Aggregate sPlot asymmetry extraction jobs')
+parser.add_argument('--cos_phi', action="store_true", help='Aggregate cos_phi difference jobs')
+parser.add_argument('--no_sbs_mass_ppim', action="store_true", help='Aggregate no sb subtraction jobs binned in mass_ppim')
+parser.add_argument('--no_sbs_xF_ppim', action="store_true", help='Aggregate no sb subtraction jobs binned in xF_ppim')
+parser.add_argument('--splot', action="store_true", help='Aggregate sPlot asymmetry extraction jobs')
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
 parser.add_argument('--rgs', default=["dt_rga"], help='Run group', nargs="+", choices=["dt_rga"])
 parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])
-parser.add_argument('--use_bin_mig', default=False, help='Use bin migration correction')
+parser.add_argument('--use_bin_mig', action="store_true", help='Use bin migration correction')
 args = parser.parse_args()
 
 # Set base directory from environment
