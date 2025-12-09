@@ -155,23 +155,9 @@ touch jobs.txt
 ```
 
 Once these jobs finish, the root files will now be accessible in the directories:
-- `$RGA_LAMBDA_ANALYSIS_JOBS_C12A_DT_RGA`
-- `$RGA_LAMBDA_ANALYSIS_JOBS_C12A_MC_RGA`
-- `$RGA_LAMBDA_ANALYSIS_JOBS_C12A_MC_RGA_SSS`
+- `$RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/<run group>`
 
 ## Asymmetry Extraction
-
-Run bin limits jobs by going into each directory and manually submitting:
-```bash
-for file in jobs/saga/test_findBinLims*; do
-    echo $file
-    cd $file
-    touch jobs.txt
-    ./setup.sh >> jobs.txt
-    cd -
-    echo
-done
-```
 
 Run kinematics jobs by going into each directory and manually submitting:
 ```bash
@@ -184,7 +170,7 @@ for file in jobs/saga/test_getBinKinematics*; do
     echo
 done
 ```
-Then, run injection studies using the `pyscripts/orchestrate*.py` files.
+Then, run the asymmetry injection and extraction studies using the `pyscripts/orchestrate*.py` files.
 
 Finally, aggregate results from injection studies, compute systematics, and plot kinematics and bin schemes with the remaining scripts in `pyscripts`.
 
