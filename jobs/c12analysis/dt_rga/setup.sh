@@ -1,7 +1,7 @@
 #!/bin/bash
 cd $RGA_LAMBDA_ANALYSIS_HOME/jobs/c12analysis/dt_rga
 i=1
-for file in $RGA_DT_DIR/*.hipo;
+for file in $DT_RGA_DIR/*.hipo;
 do
 echo "$i > $file"
 echo

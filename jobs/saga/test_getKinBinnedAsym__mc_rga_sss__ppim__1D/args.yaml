@@ -1,0 +1,165 @@
+baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga_sss/skim_*.root"
+tree: "t"
+nthreads: 1
+cuts: >-
+  mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0
+  && detector_p==6 && detector_pim==6
+  && vz_e>-10.0 && vz_e<2.5
+inject_asym: false
+inject_seed: 2
+mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
+  sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0
+sgasyms: [0.1]
+bgasyms: [0.0]
+particle_suffixes: ["_p","_pim"]
+mc_sg_match_name: "mc_sg_match"
+mc_sg_match_formula: "(bool)(ppid_p_mc==3122 && pidx_p_mc==pidx_pim_mc && abs(dtheta_p)<6*TMath::Pi()/180.0 && abs(dtheta_pim)<6*TMath::Pi()/180.0)" #NOTE: dtheta and dphi variables are automatically defined for the given particle suffixes.
+phi_s_original_name: "" #NOTE: Make sure you specify this variable name here AND in the asymmetry fit variables if you are injecting a transverse target spin dependent asymmetry.
+phi_s_original_name_dn: "" #NOTE: You also need the phi of the negative spin vector
+phi_s_injected_name: "" #NOTE: The asymmetry fit variable with name `phi_s_original_name` will be renamed to this after injection if `phi_s_original_name`!=""
+fsgasyms_xs_uu_name: "fsgasyms_xs_uu" #NOTE: Define beam helicity dependent asymmetry terms
+fsgasyms_xs_uu_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Signal asymmetries should be referenced by "sgasyms[index]".
+fsgasyms_xs_pu_name: "fsgasyms_xs_pu" #NOTE: Define beam helicity dependent asymmetry terms
+fsgasyms_xs_pu_formula: "(float)(RGA_LAMBDA_ANALYSIS_PDG_ALPHA*depol0*sgasyms[0]*asymfitvars[0])" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Signal asymmetries should be referenced by "sgasyms[index]".
+fsgasyms_xs_up_name: "fsgasyms_xs_up" #NOTE: Define target spin dependent asymmetry terms
+fsgasyms_xs_up_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Signal asymmetries should be referenced by "sgasyms[index]".
+fsgasyms_xs_pp_name: "fsgasyms_xs_pp" #NOTE: Define beam helicity and target spin dependent asymmetry terms
+fsgasyms_xs_pp_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Signal asymmetries should be referenced by "sgasyms[index]".
+fbgasyms_xs_pu_name: "fbgasyms_xs_pu" #NOTE: Define beam helicity dependent asymmetry terms
+fbgasyms_xs_pu_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Background asymmetries should be referenced by "bgasyms[index]".
+fbgasyms_xs_up_name: "fbgasyms_xs_up" #NOTE: Define target spin dependent asymmetry terms
+fbgasyms_xs_up_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Background asymmetries should be referenced by "bgasyms[index]".
+fbgasyms_xs_pp_name: "fbgasyms_xs_pp" #NOTE: Define beam helicity and target spin dependent asymmetry terms
+fbgasyms_xs_pp_formula: "(float)0.0" #NOTE: Fit and depolarization variables will be converted to their MC counterparts automatically.  Background asymmetries should be referenced by "bgasyms[index]".
+combined_spin_state: "ss"
+rdf_key_cols: ["run"] #NOTE: These are the variable name used as keys in the RDataFrame for matching CSV column values to events in the ROOT files from `inpath`.
+csv_paths: [] #NOTE: You can load additional data, e.g., run depedent target polarizations, from CSV.  These will only be loaded if you specify the CSV paths here.  The length of `run_names` and `col_names` must exactly match the length of this argument if any csv paths are specified.
+csv_key_cols: ["Run"] #NOTE: These are the variable name used as keys in the CSV for matching CSV column values to events in the ROOT files from `inpath`.
+col_names: [["PbPt"]] #NOTE: You must specify the data to take from the CSV
+col_aliases: #NOTE: You can optionally specify aliases for the column names in the CSV to avoid potential naming conflicts with existing columns in the `ROOT::RDataFrame`.
+  PbPt: "PbPt"
+helicity_name: "heli"
+helicity_formula: "-helicity"
+helicity_states:
+  plus: 1
+  zero: 0
+  minus: -1
+tspin_name: "tspin"
+tspin_formula: "(float)0.0"
+tspin_states:
+  plus: 1
+  zero: 0
+  minus: -1
+htspin_name: "htspin"
+htspin_states:
+  plus: 1
+  zero: 0
+  minus: -1
+var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
+  - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
+  - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
+  - ["depoly","y"]
+  - ["depol0_mc","(float)(y_mc*(1.0-0.5*y_mc)/(1.0-y_mc+0.5*y_mc*y_mc))"]
+  - ["depol1_mc","(float)(y_mc*sqrt(1.0-y_mc)/(1.0-y_mc+0.5*y_mc*_mc))"]
+  - ["depoly_mc","y_mc"]
+binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
+binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"] #NOTE: You can alternately load a bin scheme from another YAML file if you do not put a map under `binschemes` above.
+nbatches: 1 #NOTE: You can batch all bin schemes if they are large to allow for parellelization
+ibatch: 0 #NOTE: Specify the bin scheme batch index here
+binvars: ["Q2", "W", "x", "y", "xF_ppim", "z_ppim"]
+binvar_titles: ["Q^{2} (GeV^{2})","W (GeV)", "y", "x", "x_{F p#pi^{-}}", "z_{p#pi^{-}}"]
+binvar_lims: [[1,11], [2,5], [0,1], [0,1], [0,1], [0,1]]
+binvar_bins: [16,16,16,16,16,16]
+depolvars: ["depol0"]
+depolvar_titles: ["depol0"]
+depolvar_lims: [[0,1]]
+depolvar_bins: [16]
+asymfitvars: ["costheta1"]
+asymfitvar_titles: ["cos(#theta_{LL'}) along P_{#Lambda}"]
+asymfitvar_lims: [[-1,1]]
+asymfitvar_bins: [16]
+massfitvars: ["mass_ppim"]
+massfitvar_titles: ["M_{p#pi^{-}} (GeV)"]
+massfitvar_lims: [[1.08,1.24]]
+massfitvar_bins: [100]
+bpol: MC_RGA_BEAM_POLARIZATION #NOTE: Beam helicity values will only be injected if the beam polarization is > 0.
+tpol: 0.0 #NOTE: Target spin values will only be injected if the target polarization is > 0.
+asymfit_formula_uu: "" #NOTE: Unpolarized AND transverse target spin dependent asymmetries.  Empty formulas are not used. This asymmetry is converted internally to a RooSimultaneous PDF: 1 + A(\vec{x}; \vec{a}; \vec{d}).  Arguments are: x0,x1,x2,...,a0,a1,a2,...,d0,d1,d2,...
+asymfit_formula_pu: "RGA_LAMBDA_ANALYSIS_PDG_ALPHA*x[0]*x[1]*x[2]" #NOTE: Beam helicity dependent asymmetries. Empty formulas are not used. This asymmetry is converted internally to a RooSimultaneous PDF: 1 + helicity[RooCategory] * bpol * A(\vec{x}; \vec{a}; \vec{d}).  Arguments are: x0,x1,x2,...,a0,a1,a2,...,d0,d1,d2,...
+asymfit_formula_up: "" #NOTE: Target spin dependent asymmetries.  Empty formulas are not used. This asymmetry is converted internally to a RooSimultaneous PDF: 1 + tspin[RooCategory] * tpol * A(\vec{x}; \vec{a}; \vec{d}).  Arguments are: x0,x1,x2,...,a0,a1,a2,...,d0,d1,d2,...
+asymfit_formula_pp: "" #NOTE: Beam helicity and target spin dependent asymmetries.  Empty formulas are not used. This asymmetry is converted internally to a RooSimultaneous PDF: 1 + combined_spin_state[RooCategory] * bpol * tpol * A(\vec{x}; \vec{a}; \vec{d}).  Arguments are: x0,x1,x2,...,a0,a1,a2,...,d0,d1,d2,...
+asymfitpar_inits: [0.0]
+asymfitpar_initlims: [[-0.5,0.5]]
+use_sumw2error: true
+use_average_depol: false
+use_extended_nll: false
+use_binned_fit: false
+massfit_yamlfile_map:
+  scheme_Q2_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_Q2_bin_0.yaml
+  scheme_Q2_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_Q2_bin_1.yaml
+  scheme_Q2_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_Q2_bin_2.yaml
+  scheme_Q2_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_Q2_bin_3.yaml
+  scheme_Q2_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_Q2_bin_4.yaml
+  scheme_W_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_W_bin_0.yaml
+  scheme_W_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_W_bin_1.yaml
+  scheme_W_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_W_bin_2.yaml
+  scheme_W_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_W_bin_3.yaml
+  scheme_W_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_W_bin_4.yaml
+  scheme_y_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_y_bin_0.yaml
+  scheme_y_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_y_bin_1.yaml
+  scheme_y_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_y_bin_2.yaml
+  scheme_y_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_y_bin_3.yaml
+  scheme_y_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_y_bin_4.yaml
+  scheme_x_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_x_bin_0.yaml
+  scheme_x_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_x_bin_1.yaml
+  scheme_x_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_x_bin_2.yaml
+  scheme_x_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_x_bin_3.yaml
+  scheme_x_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_x_bin_4.yaml
+  scheme_xF_ppim_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_xF_ppim_bin_0.yaml
+  scheme_xF_ppim_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_xF_ppim_bin_1.yaml
+  scheme_xF_ppim_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_xF_ppim_bin_2.yaml
+  scheme_xF_ppim_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_xF_ppim_bin_3.yaml
+  scheme_xF_ppim_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_xF_ppim_bin_4.yaml
+  scheme_z_ppim_bin_0: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_z_ppim_bin_0.yaml
+  scheme_z_ppim_bin_1: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_z_ppim_bin_1.yaml
+  scheme_z_ppim_bin_2: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_z_ppim_bin_2.yaml
+  scheme_z_ppim_bin_3: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_z_ppim_bin_3.yaml
+  scheme_z_ppim_bin_4: /RGA_LAMBDA_ANALYSIS_HOME/yamls/massfit/mc_rga_sss/crystalball/scheme_z_ppim_bin_4.yaml
+massfit_pdf_name: "cb_cheb4" #NOTE: A mass fit and background correction will only be used if this is not empty.
+massfit_formula_sg: "crystalball(-x[0],x[1],-x[2],x[3],x[4],x[5])" #NOTE: This is parsed by RooGenericPdf using TFormula #NOTE: crystallball has the following formulation: ([p0])*ROOT::Math::crystalball_function((-x),([p3]),([p4]),([p2]),(-[p1])) # alpha, n, sigma mu ->> in order: C, mu, sigma, alpha, n
+massfit_formula_bg: "cheb4((x[0]-1.08)/(1.24-1.08),x[1],x[2],x[3],x[4],x[5])" #NOTE: This is parsed by RooGenericPdf using TFormula
+massfit_sgYield_name: "sgYield"
+massfit_bgYield_name: "bgYield"
+massfit_initsgfrac: 0.1
+massfit_parnames_sg: ["C","mu","sigma","alpha","n"]
+massfit_partitles_sg: ["C","#mu","#sigma","#alpha","n"]
+massfit_parunits_sg: ["","(GeV)", "(GeV)","",""]
+massfit_parinits_sg: [1.0, 1.1157, 0.008, 1.0, 3.0]
+massfit_parlims_sg: [ [1.0, 1.0], [0.0, 2.0], [0.0, 1.0], [0.5, 3.0], [2.0, 10.0] ]
+massfit_parnames_bg: ["b0","b1","b2","b3","b4"]
+massfit_partitles_bg: ["b_{0}","b_{1}","b_{2}","b_{3}","b_{4}"]
+massfit_parunits_bg: ["","","","",""]
+massfit_parinits_bg: [0.0, 1.0, -0.25, 0.05, -0.01]
+massfit_parlims_bg: [ [0.0, 1.0], [0.0, 1.0], [-1.0, 0.0], [-1.0, 1.0], [-1.0, 1.0]] #[ [0.0, 10.0], [-10.0, 10.0], [-10.0, 10.0], [-10.0, 10.0], [-10.0, 10.0]]
+massfit_fitwindow_lims: [ [1.08, 1.24] ]
+massfit_sgregion_lims: [ [1.11, 1.13] ]
+massfit_lg_text_size: 0.02
+massfit_lg_margin: 0.02
+massfit_lg_ncols: 2
+massfit_plot_bg_pars: false
+massfit_use_sumw2error: false
+massfit_use_extended_nll: true
+massfit_use_binned_fit: false
+use_splot: false
+massfit_sgcut: "mass_ppim>1.1104 && mass_ppim<1.12959"
+massfit_bgcut: "(mass_ppim>1.08 && mass_ppim<1.11) || (mass_ppim>1.15 && mass_ppim<1.18)"
+use_sb_subtraction: true
+use_binned_sb_bgfracs: false
+bgfracvar: "bgfracvar"
+bgfracvar_lims: [0.0,1.0]
+bgfrac_idx: 0 #NOTE: The index here refers to the formulation of the background fraction from `saga::signal::setBinnedBGFracs()`.
+use_binned_sb_weights: false #asymfitvar_binschemes: #NOTE: dropped this argument
+logpath: "out.txt"
+dump_vars: ["heli","costheta1","costheta2","costhetaT","costhetaTy","y","Q2","W","y","x","xF_ppim","z_ppim","mass_ppim"] #NOTE: Specify which branches you want to save here
+dump_dataset: false #NOTE: Specify whether you want to save the filtered dataset and exit. Filename will be: `baseoutpath`+'dataset.root'.
