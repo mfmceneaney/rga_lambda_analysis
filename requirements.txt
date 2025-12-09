@@ -1,3 +1,5 @@
 argparse
 playwright
 requests
+numpy
+matplotlib
