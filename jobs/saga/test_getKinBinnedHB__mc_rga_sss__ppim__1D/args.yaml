@@ -40,7 +40,7 @@ col_names: [["PbPt"]] #NOTE: You must specify the data to take from the CSV
 col_aliases: #NOTE: You can optionally specify aliases for the column names in the CSV to avoid potential naming conflicts with existing columns in the `ROOT::RDataFrame`.
   PbPt: "PbPt"
 helicity_name: "heli"
-helicity_formula: "-helicity"
+helicity_formula: "(float)(run==11 ? 1 : -1)"
 helicity_states:
   plus: 1
   zero: 0
