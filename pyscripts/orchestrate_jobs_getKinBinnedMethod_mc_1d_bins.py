@@ -20,6 +20,7 @@ parser.add_argument('--bgasyms', default=None, help='Background asymmetries to i
 parser.add_argument('--sgasyms2', default=None, help='Signal asymmetries to inject for additional cos_phi dependent signal term', nargs="*", type=float)
 parser.add_argument('--rgs', default=["mc_rga"], help='Run group', nargs="+", choices=["mc_rga","mc_rga_sss"])
 parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])
+parser.add_argument('--extract_string_spinner', action="store_true", help='Submit jobs to extract asymmetries from string spinner without injection')
 args = parser.parse_args()
 
 # Set dry run to `False` once you are sure you want to submit.
@@ -31,6 +32,49 @@ channels = ["ppim"]
 methods = args.methods
 RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
 YAML_DIR = os.path.abspath(os.path.join(RGA_LAMBDA_ANALYSIS_HOME,'yamls'))
+
+# Loop run groups and channels for string spinner basic asymmetry extraction
+if args.extract_string_spinner:
+    for rg in run_groups:
+        if rg!='mc_rga': continue
+        for ch in channels:
+            for method in methods:
+
+                # Grab the base directory
+                base_dir = os.path.abspath(
+                    os.path.join(
+                        RGA_LAMBDA_ANALYSIS_HOME,
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                    )
+                ) 
+
+                # Create job submission structure
+                asymfitvars = {"asymfitvars":args.asymfitvars}
+                aliases = None
+
+                # Set job file paths and configs
+                submit_path =  os.path.join(base_dir,"submit.sh")
+                yaml_path   =  os.path.join(base_dir,"args.yaml")
+                out_path    =  os.path.join(base_dir,"jobs.txt")
+                configs = dict(
+                    asymfitvars
+                )
+
+                # Set replacements
+                inject_asym = {"inject_asym": [False]}
+                helicity_formula = {"helicity_formula":["(float)(run==11? 1 : -1)"]}
+                replacements = dict(
+                    inject_asym,
+                    **helicity_formula,
+                )
+                
+                if args.splot:
+                    splot = {"use_splot":[True]}
+                    configs.update(splot)
+
+                # Create job directories and submit jobs
+                create_jobs(configs,base_dir,submit_path,yaml_path,aliases=aliases,replacements=replacements)
+                submit_jobs(configs,base_dir,submit_path,out_path,aliases=aliases,dry_run=dry_run)
 
 # Loop run groups and channels for basic asymmetry injections
 if args.sgasyms and args.bgasyms:

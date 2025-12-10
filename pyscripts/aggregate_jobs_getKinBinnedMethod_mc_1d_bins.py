@@ -24,6 +24,7 @@ parser.add_argument('--bgasyms', default=None, help='Background asymmetries inje
 parser.add_argument('--sgasyms2', default=None, help='Signal asymmetries injected for additional cos_phi dependent signal term', nargs="*", type=float)
 parser.add_argument('--rgs', default=["mc_rga"], help='Run group', nargs="+", choices=["mc_rga","mc_rga_sss"])
 parser.add_argument('--methods', default=["HB"], help='Asymmetry extraction method', nargs="+", choices=["HB","Asym"])
+parser.add_argument('--extract_string_spinner', action="store_true", help='Submit jobs to extract asymmetries from string spinner without injection')
 parser.add_argument('--aggregate_keys', default=["inject_seed"], help='Keys over which to aggregate results', nargs="+", choices=["inject_seed"])
 args = parser.parse_args()
 
@@ -182,6 +183,25 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         # binscheme_yaml_path = load_yaml(yaml_path)[binschemes_paths_name][0]
         # binschemes = load_yaml(binscheme_yaml_path)
         binschemes = None
+
+        # Aggregate string spinner basic asymmetry extraction
+        if args.extract_string_spinner and rg=='mc_rga_sss':
+
+            # Create job submission structure
+            asymfitvars = {"asymfitvars":args.asymfitvars}
+            aliases = None
+
+            # Set replacements
+            replacements = None
+
+            # Set job file paths and configs
+            configs = dict(
+                asymfitvars
+            )
+            
+            if args.splot:
+                splot = {"use_splot":[True]}
+                configs.update(splot)
 
         # Aggregate basic asymmetry injections
         if args.sgasyms and args.bgasyms:
