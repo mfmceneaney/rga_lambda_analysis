@@ -57,7 +57,7 @@ for rg in rgs:
             csv_path = os.path.abspath(
                 os.path.join(
                     RGA_LAMBDA_ANALYSIS_HOME,
-                    f'jobs/saga/test_getBinKinematics__{rg}__{ch}/out_binscheme_kinematics.csv'
+                    f'jobs/saga/test_getBinKinematics__{rg}__{ch}/out_{binvar}_kinematics.csv'
                 )
             )
             hist_path = os.path.abspath(
