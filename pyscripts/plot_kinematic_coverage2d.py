@@ -60,8 +60,8 @@ for rg in rgs:
             hist_path = os.path.abspath(
                 os.path.join(
                     RGA_LAMBDA_ANALYSIS_HOME,
-                    f'jobs/saga/test_getBinKinematicsTH2Ds__{ch}/',
-                    f'out_{rg}_fullbin_binscheme_kinematics.root'
+                    f'jobs/saga/test_getBinKinematicsTH2Ds__{rg}__{ch}/',
+                    f'out_full_bin_binscheme_kinematics.root'
                 )
             )
             hist_name       = 'h2_bin0_'+sep.join(binvars)
