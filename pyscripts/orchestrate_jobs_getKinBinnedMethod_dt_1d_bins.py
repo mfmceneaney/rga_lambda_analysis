@@ -40,7 +40,7 @@ if args.basic:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
@@ -82,7 +82,7 @@ if args.massfit_types is not None:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
@@ -159,7 +159,7 @@ if args.cos_phi:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
@@ -207,7 +207,7 @@ if args.no_sbs:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
@@ -251,7 +251,7 @@ if args.no_sbs:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}_no_bg_correction.yaml')
@@ -299,7 +299,7 @@ if args.splot:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')

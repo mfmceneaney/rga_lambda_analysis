@@ -44,7 +44,7 @@ if args.extract_string_spinner:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 ) 
 
@@ -86,7 +86,7 @@ if args.sgasyms and args.bgasyms:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 ) 
 
@@ -129,7 +129,7 @@ if args.sgasyms and args.sgasyms2:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 ) 
 
@@ -189,7 +189,7 @@ if args.massfit_types is not None:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
@@ -274,7 +274,7 @@ if args.cos_phi:
                 base_dir = os.path.abspath(
                     os.path.join(
                         RGA_LAMBDA_ANALYSIS_HOME,
-                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D/"
+                        "jobs/saga/",f"test_getKinBinned{method}__{rg}__{ch}__1D"
                     )
                 )
 
