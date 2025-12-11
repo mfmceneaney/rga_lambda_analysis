@@ -64,13 +64,13 @@ for rg in rgs:
             csv_path = os.path.abspath(
                 os.path.join(
                     RGA_LAMBDA_ANALYSIS_HOME,
-                    f'jobs/saga/test_getBinKinematics__{ch}/out_{rg}_1d_bins_{binvar}_kinematics.csv'
+                    f'jobs/saga/test_getBinKinematics__{rg}__{ch}/out_{rg}_1d_bins_{binvar}_kinematics.csv'
                 )
             )
             hist_path = os.path.abspath(
                 os.path.join(
                     RGA_LAMBDA_ANALYSIS_HOME,
-                    f'jobs/saga/test_getBinKinematicsTH1Ds__{ch}/out_{rg}_1d_bins_{binvar}_kinematics.root'
+                    f'jobs/saga/test_getBinKinematicsTH1Ds__{rg}__{ch}/out_{rg}_1d_bins_{binvar}_kinematics.root'
                 )
             )
             print(f"INFO: csv_path: {csv_path}")
