@@ -1,5 +1,5 @@
-baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
-inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga_sss/*.root"
+baseoutpath: "out_full_bin_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/dt_rga/*.root"
 tree: "t"
 nthreads: 8
 cuts: >-
@@ -8,7 +8,7 @@ cuts: >-
   && vz_e>-10.0 && vz_e<2.5
 mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
   sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0
-particle_suffixes: ["_p","_pim"]
+particle_suffixes: [] #["_p","_pim"]
 var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
   - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
   - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
@@ -23,6 +23,6 @@ asymfitvars: ["costheta1"]
 asymfitvar_lims: [[-1,1]]
 massfitvars: ["mass_ppim"]
 massfitvar_lims: [[1.08,1.24]]
-kinvars: [["x","Q2"]]
-kinvar_lims: [[[0.0,1.0],[0.0,11.0]]]
-kinvar_bins: [[50,50]]
+kinvars: [["x","Q2"],["x","W"]]
+kinvar_lims: [[[0.0,1.0],[0.0,10.0]],[[0.0,1.0],[2.0,4.0]]]
+kinvar_bins: [[100,100],[100,100]]

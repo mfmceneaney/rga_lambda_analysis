@@ -1,4 +1,4 @@
-baseoutpath: "out_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+baseoutpath: "out_1d_bins_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
 inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/dt_rga/*.root"
 tree: "t"
 nthreads: 8
@@ -14,7 +14,7 @@ var_formulas: #NOTE: Variable definitions will be applied in order in case of de
   - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
   - ["depoly","y"]
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
-binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_full_bin_ppim.yaml"]
+binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"]
 binvars: ["Q2", "W", "x", "y", "xF_ppim", "z_ppim"]
 binvar_lims: [[1,11], [2,5], [0,1], [0,1], [0,1], [0,1]]
 depolvars: ["depol0"]
