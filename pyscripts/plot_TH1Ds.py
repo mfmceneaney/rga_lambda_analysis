@@ -15,7 +15,7 @@ parser.add_argument('--rgs', default=["dt_rga"], help='Run group', nargs="+", ch
 parser.add_argument('--binvars', default=["x"], help='Bin variables', nargs="+", choices=['Q2','W','y','x','xF_ppim','z_ppim'])
 parser.add_argument('--ylims', default=(0.0,1000.0), help='Vertical plot limits', nargs=2, type=float)
 parser.add_argument('--hist_density', action="store_true", help='Plot normalized histograms')
-parser.add_argument('--grid_shape', default=(5,1), help='Grid shape', nargs=2, type=int)
+parser.add_argument('--grid_shape', default=(1,5), help='Grid shape', nargs=2, type=int)
 args = parser.parse_args()
 
 # Set base directory from environment
@@ -28,8 +28,8 @@ rgs = args.rgs #['dt_rga','mc_rga','mc_rga_sss']
 rg_labels = {'dt_rga':'Data RGA','mc_rga':'MC RGA CD','mc_rga_sss':'MC RGA SS'}
 binvars = args.binvars # binvars = ['Q2','W','y','x','xF_ppim','z_ppim']
 ylims = args.ylims #(0.0, 10000.0)
-hist_density = args.hist_density#False
-grid_shape = args.grid_shape #(5,1)
+hist_density = args.hist_density #False
+grid_shape = args.grid_shape #(1,5)
 
 # Reset ylims if plotting normalized histograms
 if hist_density:
