@@ -11,6 +11,12 @@ for file in $RGA_LAMBDA_ANALYSIS_HOME/jobs/*/*/*submit.sh; do
     fi
 done
 
+# Modify submit scripts used with saga.orchestrate
+for file in $RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/*/submit*.sh; do
+    sed -i.bak "s;\$RGA_LAMBDA_ANALYSIS_HOME;$RGA_LAMBDA_ANALYSIS_HOME;g" $file
+    sed -i.bak "s;\$RGA_LAMBDA_ANALYSIS_VOL_DIR;$RGA_LAMBDA_ANALYSIS_VOL_DIR;g" $file
+done
+
 # Modify argument yamls
 for file in $RGA_LAMBDA_ANALYSIS_HOME/jobs/saga/*/args*.yaml; do
     sed -i.bak "s;/RGA_LAMBDA_ANALYSIS_VOL_DIR;$RGA_LAMBDA_ANALYSIS_VOL_DIR;g" $file
