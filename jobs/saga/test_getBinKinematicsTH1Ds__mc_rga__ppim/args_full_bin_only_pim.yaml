@@ -4,9 +4,10 @@ tree: "t"
 nthreads: 8
 save_pdfs: true
 cuts: >-
-  vz_e>-25.0 && vz_e<20.0
+  mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0
+  && vz_e>-10.0 && vz_e<2.5
 mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
-  vz_e>-25.0 && vz_e<20.0
+  sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0
 particle_suffixes: ["_p","_pim"]
 var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
   - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
