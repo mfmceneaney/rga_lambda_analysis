@@ -13,8 +13,8 @@ var_formulas: #NOTE: Variable definitions will be applied in order in case of de
   - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
   - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
   - ["depoly","y"]
-  - ["p_ppim","(float)(sqrt((px_p+px_pim)*(px_p+px_pim)+(py_p+py_pim)*(py_p+py_pim)+(pz_p+pz_pim)*(pz_p+pz_pim))"]
-  - ["p_pim","(float)(sqrt((px_pim*px_pim)+(py_pim*py_pim)+(pz_pim*pz_pim))"]
+  - ["p_ppim","(float)(sqrt((px_p+px_pim)*(px_p+px_pim)+(py_p+py_pim)*(py_p+py_pim)+(pz_p+pz_pim)*(pz_p+pz_pim)))"]
+  - ["p_pim","(float)(sqrt((px_pim*px_pim)+(py_pim*py_pim)+(pz_pim*pz_pim)))"]
 binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
 binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_full_bin_ppim.yaml"]
 binvars: ["Q2", "W", "x", "y", "xF_ppim", "z_ppim"]
