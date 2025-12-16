@@ -2,6 +2,7 @@ baseoutpath: "out_full_bin_" #NOTE: This will be prepended to the default output
 inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/mc_rga/*.root"
 tree: "t"
 nthreads: 8
+save_pdfs: true
 cuts: >-
   mass_ppim<1.24 && Q2>1 && W>2 && y<0.8 && xF_ppim>0.0 && z_ppim<1.0
   && detector_p==6 && detector_pim==6
