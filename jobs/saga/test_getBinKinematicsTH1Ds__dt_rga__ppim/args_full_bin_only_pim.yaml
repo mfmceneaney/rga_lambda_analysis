@@ -1,0 +1,31 @@
+baseoutpath: "out_only_pim_full_bin_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/dt_rga/*.root"
+tree: "t"
+nthreads: 8
+save_pdfs: true
+cuts: >-
+  Q2>1 && W>2 && y<0.8
+  && detector_p==6 && detector_pim==6
+  && vz_e>-10.0 && vz_e<2.5
+mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
+  sqrt(px_e*px_e+py_e*py_e+pz_e*pz_e)>2.0 && vz_e>-25.0 && vz_e<20.0
+particle_suffixes: [] #["_p","_pim"]
+var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
+  - ["depol0","(float)(y*(1.0-0.5*y)/(1.0-y+0.5*y*y))"]
+  - ["depol1","(float)(y*sqrt(1.0-y)/(1.0-y+0.5*y*y))"]
+  - ["depoly","y"]
+  - ["p_ppim","(float)(sqrt((px_p+px_pim)*(px_p+px_pim)+(py_p+py_pim)*(py_p+py_pim)+(pz_p+pz_pim)*(pz_p+pz_pim)))"]
+  - ["p_pim","(float)(sqrt((px_pim*px_pim)+(py_pim*py_pim)+(pz_pim*pz_pim)))"]
+binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
+binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_full_bin_ppim.yaml"]
+binvars: []
+binvar_lims: []
+depolvars: []
+depolvar_lims: []
+asymfitvars: []
+asymfitvar_lims: []
+massfitvars: []
+massfitvar_lims: []
+kinvars: ["p_ppim","p_pim"]
+kinvar_lims: [[0.0,7.0],[0.0,2.0]]
+kinvar_bins: [100,100]
