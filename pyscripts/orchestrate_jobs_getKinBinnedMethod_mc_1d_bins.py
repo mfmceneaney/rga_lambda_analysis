@@ -36,7 +36,7 @@ YAML_DIR = os.path.abspath(os.path.join(RGA_LAMBDA_ANALYSIS_HOME,'yamls'))
 # Loop run groups and channels for string spinner basic asymmetry extraction
 if args.extract_string_spinner:
     for rg in run_groups:
-        if rg!='mc_rga': continue
+        if rg!='mc_rga_sss': continue
         for ch in channels:
             for method in methods:
 
