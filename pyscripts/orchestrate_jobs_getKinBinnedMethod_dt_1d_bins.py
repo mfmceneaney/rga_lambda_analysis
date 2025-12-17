@@ -27,6 +27,7 @@ dry_run=args.dry_run
 run_groups = args.rgs
 channels = ["ppim"]
 methods = args.methods
+asymfitvars_default = [[el] for el in args.asymfitvars]
 RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
 YAML_DIR = os.path.abspath(os.path.join(RGA_LAMBDA_ANALYSIS_HOME,'yamls'))
 
@@ -47,7 +48,7 @@ if args.basic:
 
                 # Create job submission structure
                 binschemes  = load_yaml(binscheme_yaml_path)
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
                 aliases     = {
                     "binschemes":{
@@ -89,10 +90,10 @@ if args.massfit_types is not None:
 
                 # Create job submission structure
                 binschemes  = load_yaml(binscheme_yaml_path)
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
 
-# Create list of mass fit yaml file maps
+                # Create list of mass fit yaml file maps
                 massfit_yamlfile_maps = []
                 for massfit_type in args.massfit_types:
                     massfit_yamlfile_map = {}
@@ -165,7 +166,7 @@ if args.cos_phi:
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
 
                 # Create job submission structure with fit variables and cos phi cuts
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 args_yaml_path = os.path.join(base_dir,"args.yaml")
                 args_yaml = load_yaml(args_yaml_path)
                 cuts = args_yaml["cuts"]
@@ -213,7 +214,7 @@ if args.no_sbs:
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}.yaml')
 
                 # Create job submission structure with fit variables and mass_ppim binscheme and no sideband subtraction
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 use_sb_subtractions = {"use_sb_subtraction": [False]}
                 binscheme_yaml_path = f"{RGA_LAMBDA_ANALYSIS_HOME}/yamls/out_1d_bins_ppim_no_bg_correction.yaml"
                 binscheme_yaml = load_yaml(binscheme_yaml_path)["mass_ppim"]
@@ -257,7 +258,7 @@ if args.no_sbs:
                 binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}_no_bg_correction.yaml')
 
                 # Create job submission structure with fit variables and xF_ppim binscheme and no sideband subtraction
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 use_sb_subtractions = {"use_sb_subtraction": [False]}
                 binscheme_yaml = load_yaml(binscheme_yaml_path)["xF_ppim"]
                 binschemes = {"binschemes":[binscheme_yaml]}
@@ -306,7 +307,7 @@ if args.splot:
 
                 # Create job submission structure with fit variables and cos phi cuts
                 binschemes  = load_yaml(binscheme_yaml_path)
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
                 use_splot   = {"use_splot": [True]}
                 aliases     = {

@@ -30,6 +30,7 @@ dry_run=args.dry_run
 run_groups = args.rgs
 channels = ["ppim"]
 methods = args.methods
+asymfitvars_default = [[el] for el in args.asymfitvars]
 RGA_LAMBDA_ANALYSIS_HOME = os.environ['RGA_LAMBDA_ANALYSIS_HOME']
 YAML_DIR = os.path.abspath(os.path.join(RGA_LAMBDA_ANALYSIS_HOME,'yamls'))
 
@@ -49,7 +50,7 @@ if args.extract_string_spinner:
                 ) 
 
                 # Create job submission structure
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 aliases = None
 
                 # Set job file paths and configs
@@ -91,7 +92,7 @@ if args.sgasyms and args.bgasyms:
                 ) 
 
                 # Create job submission structure
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
                 bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
                 seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
@@ -196,7 +197,7 @@ if args.massfit_types is not None:
 
                 # Create job submission structure
                 binschemes  = load_yaml(binscheme_yaml_path)
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
                 bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
                 seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
@@ -279,7 +280,7 @@ if args.cos_phi:
                 )
 
                 # Create job submission structure with fit variables and cos phi cuts
-                asymfitvars = {"asymfitvars":args.asymfitvars}
+                asymfitvars = {"asymfitvars":asymfitvars_default}
                 sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
                 bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
                 seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}

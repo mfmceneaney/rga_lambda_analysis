@@ -46,6 +46,7 @@ chain_configs = dict(
 run_groups = args.rgs
 channels   = ['ppim']
 methods    = args.methods
+asymfitvars_default = [[el] for el in args.asymfitvars]
 base_dirs  = [
     os.path.abspath(
         os.path.join(
@@ -188,7 +189,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         if args.extract_string_spinner and rg=='mc_rga_sss':
 
             # Create job submission structure
-            asymfitvars = {"asymfitvars":args.asymfitvars}
+            asymfitvars = {"asymfitvars":asymfitvars_default}
             aliases = None
 
             # Set replacements
@@ -207,7 +208,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         if args.sgasyms and args.bgasyms:
 
             # Create job submission structure
-            asymfitvars = {"asymfitvars":args.asymfitvars}
+            asymfitvars = {"asymfitvars":asymfitvars_default}
             sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
             bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
             seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
@@ -259,7 +260,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
 
             # Create job submission structure
             # binschemes  = load_yaml(binscheme_yaml_path)
-            asymfitvars = {"asymfitvars":args.asymfitvars}
+            asymfitvars = {"asymfitvars":asymfitvars_default}
             sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
             bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
             seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
@@ -326,7 +327,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         # Aggregate 2 cos phi regions
         elif args.cos_phi:
             # Create job submission structure with fit variables and cos phi cuts
-            asymfitvars = {"asymfitvars":args.asymfitvars}
+            asymfitvars = {"asymfitvars":asymfitvars_default}
             sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
             bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
             seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}

@@ -39,9 +39,10 @@ chain_configs = dict(
 ) if nbatch > 1 else {}
 
 # Set base directories to aggregate
-run_groups = ['dt_rga']
+run_groups = args.rgs
 channels   = ['ppim']
-methods    = ["Asym", "HB"]
+methods    = args.methods
+asymfitvars_default = [[el] for el in args.asymfitvars]
 base_dirs  = [
     os.path.abspath(
         os.path.join(
@@ -191,7 +192,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
 
         # Create job submission structure
         binschemes  = load_yaml(binscheme_yaml_path)
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
         aliases     = {
             "binschemes":{
@@ -220,7 +221,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
 
         # Create job submission structure
         binschemes  = load_yaml(binscheme_yaml_path)
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
 
         # Create list of mass fit yaml file maps
@@ -279,7 +280,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         binscheme_yaml_path = os.path.join(YAML_DIR,f'out_full_bin_{ch}.yaml')
 
         # Create job submission structure with fit variables and cos phi cuts
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         args_yaml_path = os.path.join(base_dir,"args.yaml")
         args_yaml = load_yaml(args_yaml_path)
         cuts = args_yaml["cuts"]
@@ -306,7 +307,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         binscheme_yaml_path = os.path.join(YAML_DIR,f"out_1d_bins_{ch}_no_bg_correction.yaml")
 
         # Create job submission structure with fit variables and mass_ppim binscheme and no sideband subtraction
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         use_sb_subtractions = {"use_sb_subtraction": [False]}
         # binscheme_yaml_path = os.path.join(YAML_DIR,f"out_1d_bins_{ch}_no_bg_correction.yaml")
         binscheme_yaml = load_yaml(binscheme_yaml_path)["mass_ppim"]
@@ -337,7 +338,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
         binscheme_yaml_path = os.path.join(YAML_DIR,f'out_1d_bins_{ch}_no_bg_correction.yaml')
 
         # Create job submission structure with fit variables and xF_ppim binscheme and no sideband subtraction
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         use_sb_subtractions = {"use_sb_subtraction": [False]}
         binscheme_yaml = load_yaml(binscheme_yaml_path)["xF_ppim"]
         binschemes = {"binschemes":[binscheme_yaml]}
@@ -373,7 +374,7 @@ for rg, ch, base_dir, ch_sgasym_label in zip(rgs,chs,base_dirs,ch_sgasym_labels)
 
         # Create job submission structure with fit variables and cos phi cuts
         binschemes  = load_yaml(binscheme_yaml_path)
-        asymfitvars = {"asymfitvars":args.asymfitvars}
+        asymfitvars = {"asymfitvars":asymfitvars_default}
         binschemes  = {"binschemes":[{el:binschemes[el]} for el in binschemes]}
         use_splot   = {"use_splot": [True]}
         aliases     = {
