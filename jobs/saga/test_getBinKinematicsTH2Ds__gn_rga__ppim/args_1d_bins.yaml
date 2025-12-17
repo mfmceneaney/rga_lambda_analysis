@@ -1,0 +1,24 @@
+baseoutpath: "out_1d_bins_" #NOTE: This will be prepended to the default output path like so: `<baseoutpath><binscheme_name>.csv`.
+inpath: "/RGA_LAMBDA_ANALYSIS_VOL_DIR/jobs/c12analysis/gn_rga/*.root"
+tree: "t"
+nthreads: 8
+cuts: >-
+  ppid_p==3122 && pidx_p==pidx_pim
+mc_cuts: >- #NOTE: This cut is preapplied on data skim but not in MC
+  ppid_p==3122
+particle_suffixes: []
+var_formulas: #NOTE: Variable definitions will be applied in order in case of dependencies, and they should follow the form [variable_name,formula].
+  - ["p_ppim","(float)(sqrt((px_p+px_pim)*(px_p+px_pim)+(py_p+py_pim)*(py_p+py_pim)+(pz_p+pz_pim)*(pz_p+pz_pim)))"]
+binschemes: #NOTE: Structure for bin schemes is { binscheme_name: { binvar_name: [binlimits] } }
+binschemes_paths: ["/RGA_LAMBDA_ANALYSIS_HOME/yamls/out_1d_bins_ppim.yaml"]
+binvars: []
+binvar_lims: []
+depolvars: []
+depolvar_lims: []
+asymfitvars: []
+asymfitvar_lims: []
+massfitvars: []
+massfitvar_lims: []
+kinvars: [["x","Q2"],["x","W"]]
+kinvar_lims: [[[0.0,1.0],[0.0,10.0]],[[0.0,1.0],[2.0,4.0]]]
+kinvar_bins: [[50,50],[50,50]]
