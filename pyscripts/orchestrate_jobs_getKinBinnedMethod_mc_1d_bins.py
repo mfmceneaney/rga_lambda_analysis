@@ -61,8 +61,8 @@ if args.extract_string_spinner:
                 )
 
                 # Set replacements
-                inject_asym = {"inject_asym": [False]}
-                helicity_formula = {"helicity_formula":["(float)(run==11? 1 : -1)"]}
+                inject_asym = {"inject_asym": False}
+                helicity_formula = {"helicity_formula":"(float)(run==11? 1 : -1)"}
                 replacements = dict(
                     inject_asym,
                     **helicity_formula,
