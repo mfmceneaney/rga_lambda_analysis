@@ -44,12 +44,12 @@ apptainer pull docker://codecr.jlab.org/hallb/clas12/container-forge/analysis:la
 
 Install `clas12-analysis`:
 ```bash
-apptainer pull clas12-analysis.sif oras://ghcr.io/mfmceneaney/clas12-analysis:latest
+apptainer pull clas12-analysis.sif oras://ghcr.io/mfmceneaney/clas12-analysis-apptainer:latest
 ```
 
 Install `saga` (or another container that will run CERN `root`):
 ```bash
-apptainer pull saga.sif oras://ghcr.io/mfmceneaney/saga:latest
+apptainer pull saga.sif oras://ghcr.io/mfmceneaney/saga-apptainer:latest
 ```
 
 For running the python scripts in [pyscripts](pyscripts),
