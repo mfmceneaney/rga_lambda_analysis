@@ -1,4 +1,4 @@
-massfit_pdf_name: "ln_cheb2" #NOTE: A mass fit and background correction will only be used if this is not empty.
+massfit_pdf_name: "ln_cheb4" #NOTE: A mass fit and background correction will only be used if this is not empty.
 massfit_formula_sg: "landau(x[0],x[1],x[2],x[3])" #NOTE: This is parsed by RooGenericPdf using TFormula
 massfit_formula_bg: "cheb4((x[0]-1.08)/(1.24-1.08),x[1],x[2],x[3],x[4],x[5])" #NOTE: This is parsed by RooGenericPdf using TFormula
 massfit_sgYield_name: "sgYield"
@@ -16,7 +16,7 @@ massfit_parinits_bg: [0.0, 1.0, -0.25, 0.05, -0.01]
 massfit_parlims_bg: [ [0.0, 1.0], [0.0, 1.0], [-1.0, 0.0], [-1.0, 1.0], [-1.0, 1.0]]
 massfit_fitwindow_lims: [ [1.08, 1.24] ]
 massfit_sgregion_lims: [ [1.11, 1.13] ]
-massfit_lg_text_size: 0.04
+massfit_lg_text_size: 0.02
 massfit_lg_margin: 0.1
 massfit_lg_ncols: 2
 massfit_plot_bg_pars: false
