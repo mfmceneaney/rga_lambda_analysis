@@ -1,5 +1,5 @@
 massfit_pdf_name: "cb_cheb2" #NOTE: A mass fit and background correction will only be used if this is not empty.
-massfit_formula_sg: "crystalball(-x[0],x[1],x[2],x[3],x[4],x[5])" #NOTE: This is parsed by RooGenericPdf using TFormula
+massfit_formula_sg: "crystalball(-x[0],x[1],-x[2],x[3],x[4],x[5])" #NOTE: This is parsed by RooGenericPdf using TFormula
 massfit_formula_bg: "cheb2((x[0]-1.08)/(1.24-1.08),x[1],x[2],x[3])" #NOTE: This is parsed by RooGenericPdf using TFormula
 massfit_sgYield_name: "sgYield"
 massfit_bgYield_name: "bgYield"
