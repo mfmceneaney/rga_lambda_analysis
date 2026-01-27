@@ -14,6 +14,9 @@ parser.add_argument('--splot', action="store_true", help='Submit splot asymmetry
 parser.add_argument('--massfit_types', default=None, help='Submit mass fit signal type jobs', nargs="*", choices=["gaus","doublegaus","landau","breitwigner","crystalball"])
 parser.add_argument('--cos_phi', action="store_true", help='Submit cos_phi difference jobs')
 parser.add_argument('--n_inject_seeds', default=16, help='Number of random injection seeds to use', type=int)
+parser.add_argument('--n_bootstrap_seeds', default=100, help='Number of random seeds for bootstrapping', type=int)
+parser.add_argument('--bootstrap_n', default=0, help='Size of random bootstrapping sample for classical method, poisson method used if 0', type=int)
+parser.add_argument('--bootstrap_use_poisson', default=True, help='Use Poisson Bootstrapping (True), classical method (False)', type=bool)
 parser.add_argument('--asymfitvars', default=["costheta1","costheta2","costhetaT","costhetaTy"], help='Lambda decay angle fit variables to use', nargs="+", choices=["costheta1","costheta2","costhetaT","costhetaTy"])
 parser.add_argument('--sgasyms', default=None, help='Signal asymmetries to inject', nargs="*", type=float)
 parser.add_argument('--bgasyms', default=None, help='Background asymmetries to inject', nargs="*", type=float)
@@ -96,10 +99,16 @@ if args.sgasyms and args.bgasyms:
                 sgasyms = {"sgasyms":[[a1] for a1 in args.sgasyms]}
                 bgasyms = {"bgasyms":[[a1] for a1 in args.bgasyms]}
                 seeds   = {"inject_seed":[2**i for i in range(args.n_inject_seeds)]}
+                bootstrap_seeds = {"bootstrap_seed":[i for i in range(args.n_bootstrap_seeds)]}
                 aliases = None
 
                 # Set replacements
                 replacements = None
+                if args.bootstrap_n>=0 or args.bootstrap_use_poisson:
+                    replacements = {
+                        "bootstrap_n":[args.bootstrap_n],
+                        "bootstrap_use_poisson":[args.bootstrap_use_poisson]
+                    }
 
                 # Set job file paths and configs
                 submit_path =  os.path.join(base_dir,"submit.sh")
@@ -110,6 +119,12 @@ if args.sgasyms and args.bgasyms:
                     **sgasyms,
                     **bgasyms,
                     **seeds
+                ) if not (args.bootstrap_n>=0 or args.bootstrap_use_poisson) else dict(
+                    asymfitvars,
+                    **sgasyms,
+                    **bgasyms,
+                    **seeds,
+                    **bootstrap_seeds
                 )
                 
                 if args.splot:
