@@ -106,8 +106,8 @@ if args.sgasyms and args.bgasyms:
                 replacements = None
                 if args.bootstrap_n>=0 or args.bootstrap_use_poisson:
                     replacements = {
-                        "bootstrap_n":[args.bootstrap_n],
-                        "bootstrap_use_poisson":[args.bootstrap_use_poisson]
+                        "bootstrap_n":args.bootstrap_n,
+                        "bootstrap_use_poisson":args.bootstrap_use_poisson
                     }
 
                 # Set job file paths and configs
