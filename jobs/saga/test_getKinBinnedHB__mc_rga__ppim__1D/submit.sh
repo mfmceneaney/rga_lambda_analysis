@@ -6,7 +6,7 @@
 #SBATCH --partition=production
 #SBATCH --account=clas12
 #SBATCH -c 1
-#SBATCH --mem-per-cpu=2G
+#SBATCH --mem-per-cpu=4G
 ##SBATCH --gres=disk:5000
 #SBATCH --time=24:00:00
 
